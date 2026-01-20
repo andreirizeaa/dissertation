@@ -312,7 +312,14 @@ The POC takes user input (company, transaction type, dates, reference template, 
 
 Design choices: established agentic frameworks rather than custom architecture; programmatic template extraction with python-pptx rather than vision models; public APIs only; RAG as a stretch goal. Out of scope: real-time data feeds, production infrastructure, compliance validation. Deal positioning and valuation judgements stay with analysts. Practical limits: one academic term, standard hardware, student API budget.
 
-Success criteria: (1) generate complete PB draft within five minutes; (2) match reference template formatting; (3) accurate financial data from source APIs; (4) content structure following IB conventions, verified against precedent examples.
+Success criteria:
+
+\begin{itemize}
+    \item Generate complete PB draft within five minutes
+    \item Match reference template formatting
+    \item Accurate financial data from source APIs
+    \item Content structure following IB conventions, verified against precedent examples
+\end{itemize}
 
 One principle runs through all of this: HITL design. The system produces drafts for human review, not finished products. The goal is a solid starting point rather than a blank slide.
 
@@ -532,12 +539,19 @@ The frontend will use React with TypeScript, deployed through Vercel. The Python
 \subsection{Reproducibility}
 \label{sec:reproducibility}
 
-Reproducibility is essential for credible research engineering. All Python dependencies will be pinned to exact versions in \texttt{requirements.txt}, with a \texttt{Dockerfile} for environment replication. LLM API calls will use \texttt{temperature=0} for evaluation runs to maximise determinism, and any randomised components will use fixed seeds. Runtime configuration will be separated from code using \texttt{config.yaml}, with all settings logged at startup. Each evaluation run will be timestamped and associated with a Git commit hash, with full prompt and response logging for LLM interactions.
+Reproducibility matters for credible research engineering. All Python dependencies will be pinned to exact versions in \texttt{requirements.txt}, with a \texttt{Dockerfile} for environment replication. LLM API calls will use \texttt{temperature=0} for evaluation runs to maximise determinism, and any randomised components will use fixed seeds. Runtime configuration will be separated from code using \texttt{config.yaml}, with all settings logged at startup. Each evaluation run will be timestamped and associated with a Git commit hash, with full prompt and response logging for LLM interactions.
 
 \subsection{Evaluation Methodology}
 \label{sec:evaluation-methodology}
 
-I will assess the system against four metrics: (1) efficiency (target: under 300 seconds for a 10-slide deck); (2) template fidelity (programmatic comparison of layout, colour, and font properties); (3) data accuracy (verification against source APIs); and (4) content quality (rubric-based assessment of narrative coherence and IB conventions).
+I will assess the system against four metrics:
+
+\begin{itemize}
+    \item \textbf{Efficiency}: target under 300 seconds for a 10-slide deck
+    \item \textbf{Template fidelity}: programmatic comparison of layout, colour, and font properties
+    \item \textbf{Data accuracy}: verification against source APIs
+    \item \textbf{Content quality}: rubric-based assessment of narrative coherence and IB conventions
+\end{itemize}
 
 To contextualise performance, I will compare outputs against a naive baseline using generic tools (Gamma, Beautiful.ai) and estimated manual creation time. Ablation studies will test each component's contribution: content generation without template analysis, template analysis without LLM planning, and data retrieval without web search. Evaluation will use fixed test cases covering different company types, sectors, and PB types, documented for replication.
 
@@ -674,7 +688,7 @@ Progress will be tracked using GitHub Issues with a Kanban board (Backlog, In Pr
 \subsection{Reusability}
 \label{sec:reusability}
 
-The architecture separates concerns into independent modules (template analysis, data retrieval, content planning, slide assembly), each with clean interfaces for standalone reuse. All code will include Google-style docstrings, with a comprehensive README and architecture documentation. The codebase will be released under MIT License to minimise barriers to reuse.
+The architecture separates concerns into independent modules (template analysis, data retrieval, content planning, slide assembly), each with clean interfaces for standalone reuse. All code will include Google-style docstrings, with a detailed README and architecture documentation. The codebase will be released under MIT License to minimise barriers to reuse.
 
 \section{Preliminary Research and Design Documentation}
 \label{sec:research-design}
