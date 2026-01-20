@@ -1,4 +1,4 @@
-\documentclass[12pt,a4paper]{report}
+\documentclass[11pt,a4paper]{article}
 
 % ============================================
 % PACKAGES
@@ -7,12 +7,27 @@
 % Encoding and fonts
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
-\usepackage{lmodern}
+\usepackage{mathptmx}  % Times New Roman
+
+% Remove section numbering
+\setcounter{secnumdepth}{0}
 
 % Page layout
 \usepackage[margin=2.5cm]{geometry}
 \usepackage{setspace}
 \onehalfspacing
+\usepackage{ragged2e}
+\justifying  % Ensure fully justified text
+
+% Disable hyphenation - move whole words to next line
+\hyphenpenalty=10000
+\exhyphenpenalty=10000
+\tolerance=1000
+\emergencystretch=\maxdimen
+
+% No paragraph indentation
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{1em}  % Add space between paragraphs instead
 
 % Graphics and figures
 \usepackage{graphicx}
@@ -20,11 +35,20 @@
 \usepackage{subcaption}
 \graphicspath{{figures/}}
 
+% Caption styling - 9pt font, labels underneath
+\usepackage{caption}
+\captionsetup{font=small,skip=10pt}
+\captionsetup[table]{position=below}
+\captionsetup[figure]{position=below}
+
 % Tables
 \usepackage{booktabs}
 \usepackage{longtable}
 \usepackage{tabularx}
 \usepackage{multirow}
+
+% Left-align text in table X columns
+\newcolumntype{L}{>{\raggedright\arraybackslash}X}
 
 % Math
 \usepackage{amsmath}
@@ -33,8 +57,10 @@
 % Code listings
 \usepackage{listings}
 \usepackage{xcolor}
+\usepackage{colortbl}
 
 \definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{headergray}{rgb}{0.9,0.9,0.9}
 \definecolor{codegray}{rgb}{0.5,0.5,0.5}
 \definecolor{codepurple}{rgb}{0.58,0,0.82}
 \definecolor{backcolour}{rgb}{0.95,0.95,0.92}
@@ -62,6 +88,7 @@
 % Hyperlinks
 \usepackage[hidelinks]{hyperref}
 \usepackage{url}
+\urlstyle{same}
 
 % Bibliography
 \usepackage[
@@ -80,12 +107,19 @@
 \usepackage{fancyhdr}
 \pagestyle{fancy}
 \fancyhf{}
-\fancyhead[L]{\leftmark}
+\fancyhead[L]{\nouppercase{\leftmark}}
 \fancyhead[R]{\thepage}
 \renewcommand{\headrulewidth}{0.4pt}
 
 % Appendices
 \usepackage[toc,page]{appendix}
+
+% Section formatting - match appendix header style with page breaks
+\usepackage{titlesec}
+\titleformat{\section}{\normalfont\fontsize{20}{24}\selectfont\bfseries}{\thesection}{1em}{}
+\titleformat{\subsection}{\normalfont\large\bfseries}{\thesubsection}{1em}{}
+\titleformat{\subsubsection}{\normalfont\normalsize\bfseries}{\thesubsubsection}{1em}{}
+\newcommand{\sectionbreak}{\clearpage}
 
 % Gantt charts
 \usepackage{pgfgantt}
@@ -132,7 +166,7 @@
 
     \vspace{1cm}
 
-    {\Large An all-in-one content generation tool providing agentic workflows with RAG search capabilities.\par}
+    {\Large A template-aware PowerPoint generation system with agentic data retrieval for investment banking.\par}
 
     \vfill
 
@@ -165,137 +199,146 @@
 
 \end{titlepage}
 
-% Abstract
-\begin{abstract}
-\addcontentsline{toc}{chapter}{Abstract}
+% --------------------------------------------
+% ABSTRACT
+% --------------------------------------------
+\newpage
+\section*{Abstract}
+\addcontentsline{toc}{section}{Abstract}
+
 % TODO: Write abstract
-\end{abstract}
 
-% Acknowledgements
-\chapter*{Acknowledgements}
-\addcontentsline{toc}{chapter}{Acknowledgements}
-% TODO: Write acknowledgements
-
-% Table of Contents
+% --------------------------------------------
+% TABLE OF CONTENTS
+% --------------------------------------------
+\newpage
+{\setlength{\parskip}{0pt}
 \tableofcontents
+}
+
+\newpage
+{\setlength{\parskip}{0pt}
+\singlespacing
 \listoffigures
+}
+
+\newpage
+{\setlength{\parskip}{0pt}
+\singlespacing
 \listoftables
+}
+
+{\setlength{\parskip}{0pt}
 \printglossary[type=\acronymtype,title=List of Acronyms]
+}
 
 % --------------------------------------------
 % MAIN MATTER
 % --------------------------------------------
 
-\chapter{Introduction, Scope and Context}
-\label{ch:introduction}
+\section{Introduction, Scope and Context}
+\label{sec:introduction}
 
-Knowledge workers in contemporary organisations spend a disproportionate fraction of their time not generating knowledge but searching for, reformatting, and repackaging existing knowledge assets \parencite{markus2001knowledge}. This observation, drawn from research into knowledge reuse in organisational settings, resonates with particular force in investment banking, where the production of client-facing presentation materials (commonly termed pitch books) consumes substantial analyst time despite the highly repetitive nature of these documents. This chapter establishes the problem context, situates the proposed solution within relevant literature, and defines the scope of this proof-of-concept implementation.
+McKinsey found knowledge workers spend a fifth of their time searching for information \parencite{mckinsey2012social}. Investment banking (IB) is worse. By some estimates, document preparation eats up half to three-quarters of a junior banker's week, and pitch books (PBs) account for a big chunk of that \parencite{cfi2025analyst, wso2024hours}. When Goldman Sachs surveyed its first-year analysts in 2021, the average was 98 hours a week; preparing documents was a major driver of the burnout they reported \parencite{bbc2021goldmanjuniors}. Yet most PBs look nearly identical to one another. Change the company name and update the numbers, and you could reuse last month's deck. This repetitiveness makes them well suited to automation.
 
-\section{The Cognitive Economics of Investment Banking}
-\label{sec:cognitive-economics}
+\subsection{Where Analyst Time Goes}
+\label{sec:analyst-time}
 
-Investment banking represents a paradigmatic knowledge industry, with professional value derived primarily from analytical insight and client relationship management rather than physical output. Yet empirical evidence suggests a misallocation of cognitive resources within this sector. Industry surveys indicate that junior analysts dedicate between 50 and 70 percent of their working hours to document preparation activities, with pitch book creation representing a substantial component of this workload \parencite{cfi2025analyst, wso2024hours}. This allocation persists despite pitch books exhibiting high structural similarity: variations typically involve updated financial metrics, adjusted company names, and modified date ranges rather than fundamentally novel analytical frameworks.
+IB sells expertise rather than physical goods, so you would expect analyst time to go toward analysis and client relationships. Often it does not.
 
-The work of investment banking analysts divides into categories of markedly different cognitive demand. High-value activities include financial modelling, valuation analysis, due diligence investigation, and client advisory work. Lower-value but time-consuming activities encompass data gathering from disparate sources, formatting content to institutional templates, and iterative revision cycles addressing stylistic rather than substantive concerns. The current distribution of effort inverts what might be considered optimal from either a productivity or professional development perspective.
+A typical PB contains an executive summary, company overview, market analysis, valuation work, transaction comparables, and next steps. These sections appear in nearly every deck, along with the same content types: company descriptions, financial tables, market charts, and deal diagrams. The data inside changes, but the shell around it rarely does.
 
-Radhakrishna and colleagues, investigating knowledge management processes in investment banking through structural equation modelling, found that organisations implementing robust knowledge management systems achieved productivity improvements of 20 to 25 percent \parencite{radhakrishna2024km}. Their research specifically identified document production workflows as presenting significant optimisation opportunities, particularly where repetitive processes could be augmented through intelligent automation while preserving the expert judgement essential to client-facing deliverables.
+Analyst tasks fall into two buckets. The first holds work that genuinely needs a trained banker: financial modelling, valuation analysis, due diligence, and client advisory. The second holds everything else: hunting down data, reformatting slides, and fixing fonts. Too many hours go into the second bucket.
 
-\section{Problem Analysis: Knowledge Reuse Barriers in Document Production}
+Banks pay junior analysts well, so time spent on low-skill tasks represents a poor return on that investment. Shifting even some of that document preparation time back toward analytical work would improve the economics. This is not about replacing analysts; it is about freeing them to do analyst work.
+
+Research supports this view. Radhakrishna et al. found that well-designed knowledge management systems boosted productivity by 20 to 25 percent \parencite{radhakrishna2024km}. Document production was identified as a prime candidate for automation, provided humans retained control over judgement calls.
+
+\subsection{Problem Analysis}
 \label{sec:problem-analysis}
 
-The inefficiencies observable in pitch book production reflect broader challenges in organisational knowledge management that Markus characterised as knowledge reuse problems \parencite{markus2001knowledge}. Markus distinguished between different knowledge reuse situations, including shared work producers, shared work practitioners, expertise-seeking novices, and secondary knowledge miners, each presenting distinct barriers to effective reuse. Pitch book production involves elements of multiple categories: analysts reuse their own prior work, seek to leverage colleagues' precedent materials, and attempt to capture institutional knowledge embedded in historical documents.
+Markus defined knowledge reuse in 2001, and her framework fits PB production well \parencite{markus2001knowledge}. She identified several reuse patterns: drawing on past work, borrowing from colleagues, finding subject matter experts, and mining old documents. PB creation involves all of these, often in the same afternoon.
 
-Three interconnected barriers impede the realisation of this reuse potential. The first concerns the misallocation of cognitive resources described above. When analysts spend hours locating relevant precedent materials, extracting applicable sections, and reformatting content to current requirements, they engage in retrieval and transformation tasks that add minimal intellectual value. This time could alternatively support deeper analytical work or expanded client engagement.
+Three things get in the way.
 
-The second barrier involves the erosion of institutional memory through inadequate knowledge codification. Knowledge management theory distinguishes between tacit knowledge (experiential understanding that resists explicit articulation) and explicit knowledge that can be documented and transmitted \parencite{dalkir2005km}. Pitch books represent attempts to codify analytical insights into explicit form, yet the institutional knowledge about effective pitch book construction, including template conventions, narrative structures, and persuasive framings, often remains tacit, residing in individual practitioners' experience rather than accessible repositories.
+First, too much time goes to low-value work. Analysts spend hours searching through old decks, extracting useful content, and reformatting slides to fit the current template. None of that requires analytical thinking, yet it crowds out the work that does.
 
-The third barrier relates to the friction inherent in transferring tacit knowledge to new practitioners. Each institution maintains distinctive approaches to pitch book construction, encompassing template designs, data sourcing procedures, narrative conventions, and quality expectations. Junior analysts must acquire this tacit knowledge through observation and iterative feedback, a process that extends onboarding periods and generates revision cycles that consume senior banker time. The absence of systematic knowledge capture mechanisms means this learning process repeats with each new cohort.
+Second, institutional knowledge tends to disappear. Researchers distinguish between tacit knowledge, which stays in people's heads, and explicit knowledge, which gets written down \parencite{dalkir2011km}. PBs themselves are explicit since they capture analysis in a shareable format. But the knowledge of how to make a good PB remains tacit: which templates work for which situations, how to structure the narrative, what separates a persuasive pitch from a forgettable one. New analysts pick this up by watching senior colleagues, not by reading a manual.
 
-\section{Gap Analysis: The Evolution of Presentation Automation}
+Third, onboarding takes longer than it should. Each bank has its own templates, preferred data sources, writing conventions, and quality expectations. Junior analysts absorb these through trial and error, which is slow for them and a drain on the senior bankers who review their work.
+
+These three problems reinforce each other. When knowledge is scattered, people waste time searching for it. When standards live in people's heads rather than in documents, output quality varies and review cycles drag on. When training happens informally, experienced staff lose hours to coaching that could have gone toward billable work. A system that tackled even one of these issues would help, but one that addressed all three could meaningfully change how PB production works.
+
+\subsection{Gap Analysis}
 \label{sec:gap-analysis}
 
-Research in automated presentation generation has progressed through distinct paradigms, each addressing different dimensions of the challenge. Early approaches, emerging around 2014, focused primarily on text-to-slide conversion, transforming written content into slide format through layout algorithms and content segmentation \parencite{zheng2025pptagent}. These systems prioritised content organisation over visual design, producing functional but aesthetically limited outputs. Subsequent developments introduced template-based generation, where predefined slide structures constrained output formatting, improving visual consistency at the cost of flexibility.
+Automated presentation tools have existed for years. Early versions converted text to slides using layout algorithms, but although the content was organised, the slides looked bad and nobody wanted to use them \parencite{zheng2025pptagent}. Template-based systems came next, where you define the structure upfront and the system fills in the blanks. That fixed the visual problems but made everything rigid.
 
-The recent PPTAgent framework advances beyond this paradigm by adopting an edit-based approach that analyses reference presentations to extract structural patterns, then applies these patterns to new content \parencite{zheng2025pptagent}. This represents a significant conceptual shift: rather than generating slides from abstract principles, the system learns from concrete examples. PPTAgent demonstrates superior performance across content quality, design coherence, and narrative structure compared to text-to-slide alternatives. The framework's evaluation methodology, employing both automated metrics and human assessment, establishes benchmarks applicable to domain-specific implementations.
+PPTAgent takes a different approach \parencite{zheng2025pptagent}. It analyses reference presentations, extracts their structural patterns, and applies those patterns to new content. Because it learns from real examples rather than following hardcoded rules, it beat older text-to-slide systems on both content quality and design quality in testing.
 
-However, PPTAgent and comparable systems target general presentation scenarios, leaving domain-specific requirements unaddressed. Investment banking pitch books involve specialised content types (financial tables, transaction comparables, market positioning charts) that generic systems handle inadequately. Furthermore, institutional template compliance represents a hard constraint in professional contexts that academic research has not prioritised. A pitch book that violates corporate visual identity standards fails regardless of content quality.
+The catch is that PPTAgent targets general-purpose presentations, and IB PBs are anything but general. They have financial tables with specific column layouts, transaction comparables formatted in particular ways, and market positioning charts that follow visual conventions the industry recognises. Generic tools miss these conventions entirely, and in IB, getting the template wrong kills credibility. You could have the best analysis in the world, but if the deck looks off, nobody will take it seriously.
 
-Commercial platforms offering AI-assisted presentation creation similarly address generic business contexts. These tools provide value for general corporate presentations but lack the domain knowledge, data integration capabilities, and template fidelity required for investment banking applications. The gap between available solutions and professional requirements creates the opportunity this project addresses.
+Commercial tools share this flaw. Beautiful.ai, Tome, and Gamma can all generate slides from a prompt, but the output is generic and every slide needs rework to match firm standards. None of them connect to financial data sources either, so analysts still have to gather numbers and enter them by hand.
 
-Retrieval-Augmented Generation provides an architectural foundation for grounding generative outputs in authoritative knowledge sources \parencite{lewis2020rag}. By coupling large language models with retrieval mechanisms that surface relevant documents, RAG architectures reduce hallucination risks and improve factual accuracy. For pitch book generation, RAG offers potential for incorporating precedent materials, ensuring generated content aligns with institutional conventions and historical approaches. However, implementing effective retrieval requires substantial infrastructure for document processing, embedding generation, and similarity search; investments that may exceed proof-of-concept scope.
+Here is the gap. Current systems either produce generic output that needs heavy cleanup, or they require large training datasets to learn industry-specific patterns. Most banks lack those datasets. What nobody seems to have built yet is a system that can take a single reference template, extract its styling and layout rules programmatically, and generate new slides that follow those rules exactly. That kind of template-aware approach would let firms preserve their visual identity while offloading the tedious formatting work.
 
-Agentic AI architectures extend these capabilities by enabling autonomous planning and execution of multi-step processes. Rather than responding to single prompts, agentic systems decompose complex tasks, invoke appropriate tools, and synthesise results \parencite{ibm2024agentic}. For pitch book generation, agentic approaches enable workflows that gather financial data from market sources, retrieve relevant precedent materials, generate content specifications, and assemble formatted outputs, all orchestrated without continuous human intervention. This aligns with the broader industry trajectory toward agentic enterprise systems \parencite{mckinsey2025agentic}.
+Agentic AI architectures look promising for this \parencite{ibm2024agentic}. Instead of one model doing everything in a single pass, the system breaks tasks into steps and uses the right tool for each one. Wang et al. surveyed LLM-based agents and found that progress has been rapid \parencite{wang2023llmagents}. McKinsey estimates generative AI could deliver \$340 billion annually in banking \parencite{mckinsey2024genaibanking}. Document-heavy workflows sit right in the sweet spot.
 
-The synthesis of these capabilities (template-aware generation, domain-specific data retrieval, and agentic orchestration) defines the technical approach this project explores. The novel contribution lies not in advancing any individual capability but in demonstrating their integration for a specific professional domain with stringent compliance requirements.
+My project addresses this gap. The pipeline extracts layouts, colour palettes, and placeholder positions from a template using python-pptx, uses an LLM to plan content, then assembles slides matching the original style. I am using existing agentic frameworks rather than custom orchestration. RAG against past PBs is a stretch goal.
 
-\section{Aims and Objectives}
+\subsection{Aims and Objectives}
 \label{sec:aims-objectives}
 
-This project aims to design, implement, and evaluate a proof-of-concept system demonstrating how AI-powered document generation can address knowledge reuse barriers in investment banking pitch book production while maintaining institutional template compliance.
+The aim is to design, build, and test a proof-of-concept (POC) demonstrating how AI-powered document generation can tackle the knowledge reuse problems described above. The system must respect institutional templates throughout; if it generates slides that do not match the house style, the whole thing fails.
 
-From an organisational perspective, the aim is to demonstrate a workflow enabling analysts to generate substantive first drafts of pitch books through minimal input specification, reducing time allocation to document formatting while preserving human oversight of analytical content. This supports the broader objective of reallocating cognitive resources toward higher-value activities.
+On the business side, I want a workflow where an analyst can provide minimal input and get back a solid first draft. That would cut the time spent on formatting grunt work while keeping humans in control of the actual analysis. The target users are junior analysts, the people who currently spend most of their hours on document preparation.
 
-From an educational perspective, the aim is to investigate the technical integration of large language model orchestration with programmatic document generation, contributing understanding of how AI capabilities can be applied to professional document production contexts with specific compliance constraints.
+On the learning side, I want to understand how to connect LLM orchestration with programmatic document generation. That means getting into agentic architectures, learning how to extract patterns from templates, and working out how to combine multiple AI capabilities into something that functions end to end. I am also interested in human-in-the-loop (HITL) design, since in a regulated industry like finance, AI tools need to support professional judgement rather than try to replace it.
 
-These aims translate into five concrete objectives:
+Five objectives structure the work:
 
 \begin{enumerate}
-    \item Design and implement a template analysis component that programmatically extracts layout structures, colour palettes, font specifications, and placeholder configurations from reference PowerPoint files, enabling generated content to maintain visual consistency with institutional standards.
-
-    \item Develop an agentic data retrieval layer that autonomously gathers company financials, market data, and regulatory filings from public sources including Yahoo Finance and SEC EDGAR, reducing manual data collection effort.
-
-    \item Construct an LLM-powered content planning module that generates structured specifications for slide content, adapting output to different pitch book types while maintaining narrative coherence appropriate to investment banking conventions.
-
-    \item Build a slide assembly component that maps planned content to extracted template structures, producing PowerPoint files that comply with institutional formatting requirements.
-
-    \item Evaluate system outputs against metrics encompassing generation efficiency, template compliance, and content appropriateness, establishing baseline performance for future development.
+    \item Build a template analysis component that takes a reference PowerPoint file and extracts its layout structures, colour palettes, font specifications, and placeholder positions.
+    \item Build an agentic data retrieval layer that automatically pulls company financials, market data, and regulatory filings from Yahoo Finance and SEC EDGAR.
+    \item Build an LLM-powered content planning module that produces structured slide specifications adapted to different PB types while keeping the overall narrative coherent.
+    \item Build a slide assembly component that takes the content plan and template patterns and produces a PowerPoint file meeting formatting standards.
+    \item Evaluate the system by measuring generation speed, template matching, and content quality.
 \end{enumerate}
 
-\section{Scope, Constraints and Success Criteria}
+\subsection{Scope and Success Criteria}
 \label{sec:scope}
 
-The project scope encompasses a functional proof of concept demonstrating the complete workflow from user input specification through formatted pitch book output. The system accepts deal context parameters (target company, transaction type, relevant date ranges), a reference template file, and pitch book type specification, producing a PowerPoint file populated with retrieved data and generated content structured according to the template design.
+The POC takes user input (company, transaction type, dates, reference template, PB type) and produces a formatted PowerPoint. Target PB types are company overviews, market updates, and transaction summaries. Full valuation presentations are out of scope.
 
-Several constraints define implementation boundaries. The agentic orchestration layer employs established frameworks rather than custom agent architectures, prioritising integration demonstration over novel agent development. Template analysis relies on programmatic extraction through python-pptx rather than vision-language model interpretation, deferring visual understanding capabilities to future work. Data sources are limited to publicly accessible APIs, excluding proprietary market data terminals that would be available in production contexts. Retrieval-Augmented Generation against precedent material repositories is designated as a stretch goal rather than core requirement, acknowledging the infrastructure investment this capability demands.
+Design choices: established agentic frameworks rather than custom architecture; programmatic template extraction with python-pptx rather than vision models; public APIs only; RAG as a stretch goal. Out of scope: real-time data feeds, production infrastructure, compliance validation. Deal positioning and valuation judgements stay with analysts. Practical limits: one academic term, standard hardware, student API budget.
 
-The project explicitly excludes real-time market data integration, production deployment infrastructure, and comprehensive regulatory compliance validation. These represent essential considerations for production systems but exceed proof-of-concept scope. Similarly, the system does not attempt to replace analyst judgement on deal positioning, valuation conclusions, or client-specific customisation; these remain firmly within human responsibility.
+Success criteria: (1) generate complete PB draft within five minutes; (2) match reference template formatting; (3) accurate financial data from source APIs; (4) content structure following IB conventions, verified against precedent examples.
 
-Success evaluation applies four criteria. First, the system should generate complete pitch book drafts within five minutes of input specification, demonstrating practical utility for workflow integration. Second, generated outputs should maintain template fidelity, with formatting, colours, and layouts matching reference files within assessable tolerances. Third, retrieved financial data should accurately reflect source information, with verification against manual retrieval establishing correctness baselines. Fourth, content structure should align with investment banking conventions, assessed through comparison with precedent examples and, where available, practitioner feedback.
-
-Throughout, the system is designed for human-in-the-loop operation, producing drafts that support rather than supplant professional judgement. The objective is augmentation, enabling analysts to begin from substantive starting points rather than blank slides, not automation of the complete pitch book production process.
+One principle runs through all of this: HITL design. The system produces drafts for human review, not finished products. The goal is a solid starting point rather than a blank slide.
 
 % --------------------------------------------
-% SUBSEQUENT CHAPTERS (placeholders)
+% SUBSEQUENT SECTIONS
 % --------------------------------------------
 
-\chapter{Literature Review}
-\label{ch:literature-review}
+\section{Methodology and Project Plan}
+\label{sec:methodology}
 
-% TODO: Expand literature review
+This section covers how I will approach development, what the requirements are, which technologies I have chosen and why, the project schedule, and how I am thinking about risks and ethics.
 
-\chapter{Methodology and Project Plan}
-\label{ch:methodology}
-
-The successful delivery of a software engineering project requires systematic planning, appropriate methodology selection, and rigorous governance frameworks. This chapter details the development approach adopted, specifies both technical and business requirements, justifies technology selections through comparative analysis, presents the project schedule, and addresses risk management alongside ethical considerations. The methodology aligns with contemporary software engineering practices while accommodating the research dimensions inherent in a proof-of-concept investigation.
-
-\section{Development Methodology}
+\subsection{Development Methodology}
 \label{sec:dev-methodology}
 
-Software development methodologies exist on a spectrum from plan-driven approaches such as Waterfall to adaptive approaches including various Agile frameworks \parencite{sommerville2016software}. The selection of an appropriate methodology depends on factors including requirements stability, project complexity, stakeholder availability, and team size. Table~\ref{tab:methodology-comparison} compares candidate methodologies against project-specific criteria.
+Software development methodologies range from plan-driven approaches like Waterfall to adaptive approaches like Agile \parencite{sommerville2016software}. Choosing the right methodology depends on requirement stability, project complexity, stakeholder availability, and team size. Table~\ref{tab:methodology-comparison} compares methodologies against criteria relevant to this project.
 
 \begin{table}[H]
 \centering
-\caption{Comparison of Development Methodologies}
-\label{tab:methodology-comparison}
-\begin{tabularx}{\textwidth}{|l|X|X|X|}
+\begin{tabularx}{\textwidth}{|l|L|L|L|}
 \hline
 \textbf{Criterion} & \textbf{Waterfall} & \textbf{Scrum} & \textbf{Iterative Prototyping} \\
 \hline
-Requirements stability & Requires fixed requirements upfront & Accommodates changing requirements & Well-suited to evolving requirements \\
+Requirements stability & Requires fixed requirements upfront & Accommodates changing requirements & Works well when requirements change \\
 \hline
 Feedback loops & Late feedback after implementation & Sprint reviews every 2-4 weeks & Continuous feedback through prototypes \\
-\hline
-Documentation & Extensive upfront documentation & Minimal, working software prioritised & Moderate, focused on design decisions \\
 \hline
 Risk management & Risks discovered late & Regular risk reassessment & Early risk identification through prototypes \\
 \hline
@@ -304,42 +347,39 @@ Solo developer suitability & Moderate & Low (designed for teams) & High \\
 Research integration & Poor & Moderate & Excellent \\
 \hline
 \end{tabularx}
+\caption{Comparison of Development Methodologies}
+\label{tab:methodology-comparison}
 \end{table}
 
-This project adopts an \textbf{iterative prototyping methodology} informed by Agile principles. This selection reflects several project characteristics. First, requirements exhibit inherent uncertainty: the optimal approach to template analysis, content generation, and slide assembly cannot be fully specified prior to experimentation. Second, the project involves a single developer, rendering team-oriented ceremonies from Scrum inappropriate. Third, the research dimension necessitates flexibility to pursue promising directions discovered during implementation while abandoning approaches that prove ineffective.
+I will use a hybrid methodology combining iterative prototyping with structured research engineering practices. Pure Waterfall cannot accommodate the exploratory nature of this work; full Scrum adds overhead without benefit for a solo developer. Iterative prototyping preserves flexibility while layered engineering practices ensure reproducibility.
 
-The iterative approach structures development into cycles, each producing a functional prototype that demonstrates specific capabilities. Each iteration encompasses requirements refinement, design, implementation, and evaluation phases. Stakeholder feedback, from the academic supervisor and, where accessible, domain practitioners, informs subsequent iterations. This approach aligns with Beck's observation that software development benefits from embracing change rather than attempting to prevent it \parencite{beck2000extreme}.
+Each two-week iteration will produce a working prototype targeting defined requirements. At each cycle's end, I will conduct a retrospective review and document outcomes. Feedback from fortnightly supervisor meetings and, where possible, IB practitioners will shape subsequent cycles.
 
-Version control through Git provides the infrastructure for iterative development, enabling experimentation on feature branches while maintaining stable baselines. Continuous integration practices ensure that code quality is maintained throughout the development process, with automated testing validating functionality after each significant change.
+I will use Git with a simplified GitFlow model (main, develop, feature branches). Continuous integration via GitHub Actions will run tests and linting on every push, enforcing 80\% coverage for core modules. I will maintain a decision log using Architecture Decision Records (ADRs) to document technical choices and trade-offs.
 
-\section{Requirements Analysis}
+\subsection{Requirements Analysis}
 \label{sec:requirements}
 
-Requirements specification establishes the contractual foundation for project evaluation. This section distinguishes business requirements addressing organisational value from functional and non-functional requirements specifying system behaviour and quality attributes respectively.
+Good requirements are needed to measure whether the project succeeded. This section separates business requirements (the value delivered) from functional requirements (what the system does) and non-functional requirements (how well it performs).
 
-\subsection{Business Requirements}
+\subsubsection{Business Requirements}
 
-Business requirements articulate the organisational value proposition that justifies project investment. For this proof-of-concept, business requirements derive from the knowledge management inefficiencies identified in Chapter~\ref{ch:introduction}:
+Business requirements describe value the project should deliver:
 
 \begin{enumerate}
-    \item \textbf{BR1: Productivity Enhancement}: The system should demonstrate potential to reduce time spent on initial pitch book drafting by enabling generation of substantive first drafts from minimal input specification.
-
-    \item \textbf{BR2: Knowledge Codification}: The system should capture institutional presentation conventions through template analysis, reducing dependence on tacit knowledge held by individual practitioners.
-
-    \item \textbf{BR3: Quality Consistency}: Generated outputs should maintain consistent adherence to corporate visual identity standards, reducing revision cycles attributable to formatting inconsistencies.
-
-    \item \textbf{BR4: Data Accuracy}: Financial data incorporated into generated pitch books should accurately reflect source information, supporting rather than undermining analyst credibility.
+    \item \textbf{BR1: Productivity Enhancement}: Reduce time spent on initial PB drafting by generating solid first drafts from minimal input.
+    \item \textbf{BR2: Knowledge Codification}: Capture institutional presentation standards through template analysis, reducing reliance on tacit knowledge.
+    \item \textbf{BR3: Quality Consistency}: Follow corporate visual identity standards consistently, reducing revision cycles caused by formatting issues.
+    \item \textbf{BR4: Data Accuracy}: Financial data in generated PBs should accurately reflect source information.
 \end{enumerate}
 
-\subsection{Functional Requirements}
+\subsubsection{Functional Requirements}
 
-Functional requirements specify discrete system capabilities. Table~\ref{tab:functional-requirements} presents requirements organised by system component, with priority classifications following MoSCoW conventions (Must have, Should have, Could have, Won't have).
+Table~\ref{tab:functional-requirements} lists functional requirements by component using MoSCoW prioritisation (Must have, Should have, Could have, Won't have).
 
 \begin{table}[H]
 \centering
-\caption{Functional Requirements Specification}
-\label{tab:functional-requirements}
-\begin{tabularx}{\textwidth}{|l|l|X|l|}
+\begin{tabularx}{\textwidth}{|l|l|L|l|}
 \hline
 \textbf{ID} & \textbf{Component} & \textbf{Requirement} & \textbf{Priority} \\
 \hline
@@ -357,7 +397,7 @@ FR6 & Data Retrieval & Perform web searches for company news & Should \\
 \hline
 FR7 & Content Planner & Generate slide-by-slide content specifications & Must \\
 \hline
-FR8 & Content Planner & Adapt content structure to pitch book type & Must \\
+FR8 & Content Planner & Adapt content structure to PB type & Must \\
 \hline
 FR9 & Content Planner & Maintain narrative coherence across slides & Should \\
 \hline
@@ -374,21 +414,21 @@ FR14 & Orchestration & Handle API failures gracefully & Should \\
 FR15 & RAG Search & Query precedent material repository & Could \\
 \hline
 \end{tabularx}
+\caption{Functional Requirements Specification}
+\label{tab:functional-requirements}
 \end{table}
 
-\subsection{Non-Functional Requirements}
+\subsubsection{Non-Functional Requirements}
 
-Non-functional requirements specify quality attributes constraining how the system delivers functionality. Table~\ref{tab:nonfunctional-requirements} presents requirements with measurable acceptance criteria where applicable.
+Table~\ref{tab:nonfunctional-requirements} lists quality requirements with measurable acceptance criteria.
 
 \begin{table}[H]
 \centering
-\caption{Non-Functional Requirements Specification}
-\label{tab:nonfunctional-requirements}
-\begin{tabularx}{\textwidth}{|l|l|X|X|}
+\begin{tabularx}{\textwidth}{|l|l|L|L|}
 \hline
 \textbf{ID} & \textbf{Category} & \textbf{Requirement} & \textbf{Acceptance Criterion} \\
 \hline
-NFR1 & Performance & System generates complete pitch book draft & Within 5 minutes of input submission \\
+NFR1 & Performance & System generates complete PB draft & Within 5 minutes of input submission \\
 \hline
 NFR2 & Performance & API response handling & Timeout after 30 seconds with graceful degradation \\
 \hline
@@ -398,33 +438,29 @@ NFR4 & Usability & Input specification interface & Requires no technical experti
 \hline
 NFR5 & Maintainability & Codebase documentation & All public functions documented with docstrings \\
 \hline
-NFR6 & Maintainability & Code quality & Passes linting with no critical violations \\
+NFR6 & Security & API credential management & No credentials in source code; environment variables used \\
 \hline
-NFR7 & Security & API credential management & No credentials in source code; environment variables used \\
+NFR7 & Security & Input validation & All user inputs sanitised before processing \\
 \hline
-NFR8 & Security & Input validation & All user inputs sanitised before processing \\
-\hline
-NFR9 & Compatibility & Output format & Valid .pptx files openable in Microsoft PowerPoint \\
-\hline
-NFR10 & Scalability & Concurrent users & Support single-user operation (POC scope) \\
+NFR8 & Compatibility & Output format & Valid .pptx files openable in Microsoft PowerPoint \\
 \hline
 \end{tabularx}
+\caption{Non-Functional Requirements Specification}
+\label{tab:nonfunctional-requirements}
 \end{table}
 
-\section{Technology Stack}
+\subsection{Technology Stack}
 \label{sec:technology-stack}
 
-Technology selection balances multiple considerations including fitness for purpose, developer familiarity, ecosystem maturity, and long-term maintainability. This section justifies selections through comparative analysis against alternatives.
+I chose technologies based on whether they fit the task, whether I knew them already, how well-developed their ecosystems were, and how easy they would be to maintain.
 
-\subsection{Programming Language and Framework}
+\subsubsection{Programming Language and Framework}
 
-Python serves as the primary implementation language, selected for its dominance in AI/ML development and extensive library ecosystem. Table~\ref{tab:language-comparison} compares Python against alternatives.
+I chose Python as the main language because it dominates AI and ML development and has a large library ecosystem. I am also comfortable with Python from my work experience, which means I can focus on the problem rather than learning a new language. Table~\ref{tab:language-comparison} compares Python with alternatives.
 
 \begin{table}[H]
 \centering
-\caption{Programming Language Comparison}
-\label{tab:language-comparison}
-\begin{tabularx}{\textwidth}{|l|X|X|X|}
+\begin{tabularx}{\textwidth}{|l|L|L|L|}
 \hline
 \textbf{Criterion} & \textbf{Python} & \textbf{JavaScript/Node.js} & \textbf{Java} \\
 \hline
@@ -436,22 +472,20 @@ Async capabilities & asyncio, FastAPI & Native (excellent) & Reactive streams (c
 \hline
 Development velocity & High & High & Moderate \\
 \hline
-Type safety & Optional (mypy) & Optional (TypeScript) & Strong \\
-\hline
 \end{tabularx}
+\caption{Programming Language Comparison}
+\label{tab:language-comparison}
 \end{table}
 
-FastAPI provides the backend framework, offering asynchronous request handling essential for managing concurrent API calls to external data sources. Its automatic OpenAPI documentation generation facilitates testing and future integration efforts.
+FastAPI will handle the backend. It processes requests asynchronously, which matters when making multiple API calls to external data sources at the same time. FastAPI also generates OpenAPI documentation automatically, which will make testing easier.
 
-\subsection{AI and LLM Integration}
+\subsubsection{AI and LLM Integration}
 
-The system leverages large language models for content planning and generation. Table~\ref{tab:llm-comparison} compares available options.
+The system will use LLMs for content planning and generation. Table~\ref{tab:llm-comparison} compares the options I considered.
 
 \begin{table}[H]
 \centering
-\caption{Large Language Model Comparison}
-\label{tab:llm-comparison}
-\begin{tabularx}{\textwidth}{|l|X|X|X|}
+\begin{tabularx}{\textwidth}{|l|L|L|L|}
 \hline
 \textbf{Criterion} & \textbf{GPT-4/GPT-4o} & \textbf{Claude 3.5} & \textbf{Gemini Pro} \\
 \hline
@@ -463,22 +497,20 @@ Function calling & Native support & Native support & Native support \\
 \hline
 Agent frameworks & OpenAI Agents SDK & Claude Agent SDK & LangChain integration \\
 \hline
-Cost efficiency & Moderate & Moderate & Good \\
-\hline
 \end{tabularx}
+\caption{Large Language Model Comparison}
+\label{tab:llm-comparison}
 \end{table}
 
-OpenAI's GPT-4o model serves as the primary LLM, selected for its robust structured output capabilities and mature agent framework support through the OpenAI Agents SDK. This framework enables tool-use patterns essential for the agentic data retrieval layer without requiring custom orchestration implementation.
+I chose OpenAI's GPT-4o as the primary LLM. It handles structured output well and has good agent framework support through the OpenAI Agents SDK, which provides tool-use patterns for the agentic data retrieval layer.
 
-\subsection{Data Sources and APIs}
+\subsubsection{Data Sources and APIs}
 
-External data retrieval employs publicly accessible APIs to avoid proprietary data licensing constraints. Table~\ref{tab:data-sources} summarises the data sources utilised.
+I will use publicly accessible APIs to avoid proprietary data licensing complications. Table~\ref{tab:data-sources} summarises the data sources.
 
 \begin{table}[H]
 \centering
-\caption{External Data Sources}
-\label{tab:data-sources}
-\begin{tabularx}{\textwidth}{|l|X|X|l|}
+\begin{tabularx}{\textwidth}{|l|L|L|l|}
 \hline
 \textbf{Source} & \textbf{Data Provided} & \textbf{Access Method} & \textbf{Rate Limits} \\
 \hline
@@ -489,81 +521,88 @@ SEC EDGAR & 10-K, 10-Q filings, company facts & REST API & 10 requests/second \\
 Web Search & Company news, market commentary & SerpAPI or similar & Per subscription \\
 \hline
 \end{tabularx}
+\caption{External Data Sources}
+\label{tab:data-sources}
 \end{table}
 
-\subsection{Frontend and Deployment}
+\subsubsection{Frontend and Deployment}
 
-React with TypeScript provides the frontend framework, deployed via Vercel for simplified continuous deployment. The backend deploys on Render, offering managed Python hosting with automatic scaling capabilities. Supabase provides PostgreSQL database services with built-in authentication, though database utilisation remains minimal for this proof-of-concept scope.
+The frontend will use React with TypeScript, deployed through Vercel. The Python backend will run on Render with managed hosting. Supabase will provide PostgreSQL database services.
 
-\section{Project Plan}
+\subsection{Reproducibility}
+\label{sec:reproducibility}
+
+Reproducibility is essential for credible research engineering. All Python dependencies will be pinned to exact versions in \texttt{requirements.txt}, with a \texttt{Dockerfile} for environment replication. LLM API calls will use \texttt{temperature=0} for evaluation runs to maximise determinism, and any randomised components will use fixed seeds. Runtime configuration will be separated from code using \texttt{config.yaml}, with all settings logged at startup. Each evaluation run will be timestamped and associated with a Git commit hash, with full prompt and response logging for LLM interactions.
+
+\subsection{Evaluation Methodology}
+\label{sec:evaluation-methodology}
+
+I will assess the system against four metrics: (1) efficiency (target: under 300 seconds for a 10-slide deck); (2) template fidelity (programmatic comparison of layout, colour, and font properties); (3) data accuracy (verification against source APIs); and (4) content quality (rubric-based assessment of narrative coherence and IB conventions).
+
+To contextualise performance, I will compare outputs against a naive baseline using generic tools (Gamma, Beautiful.ai) and estimated manual creation time. Ablation studies will test each component's contribution: content generation without template analysis, template analysis without LLM planning, and data retrieval without web search. Evaluation will use fixed test cases covering different company types, sectors, and PB types, documented for replication.
+
+\subsection{Project Plan}
 \label{sec:project-plan}
 
-The project timeline spans thirteen weeks from initiation to final submission, structured into phases aligned with the iterative methodology. Figure~\ref{fig:gantt-chart} presents the schedule as a Gantt chart, with dependencies indicated through sequential positioning.
+The project will run for thirteen weeks from start to final submission. I have divided it into phases matching the iterative approach. Figure~\ref{fig:gantt-chart} shows the schedule as a Gantt chart.
 
 \begin{figure}[H]
 \centering
+\begin{tikzpicture}
 \begin{ganttchart}[
     hgrid,
     vgrid,
-    x unit=0.55cm,
-    y unit chart=0.6cm,
-    title height=1,
-    bar height=0.5,
-    bar label font=\footnotesize,
-    group label font=\footnotesize\bfseries,
-    title label font=\footnotesize,
-    milestone label font=\footnotesize,
-    bar/.append style={fill=blue!40},
-    group/.append style={fill=gray!40},
-    milestone/.append style={fill=red!60}
+    x unit=1.18cm,
+    y unit chart=0.9cm,
+    bar height=0.6,
+    bar label font=\small\bfseries,
+    bar/.append style={fill=blue!50},
+    milestone/.append style={fill=red!70},
+    inline,
+    bar label node/.append style={left=0.15cm, text=white},
+    milestone label node/.append style={right=0.2cm, font=\small},
+    y unit title=0pt,
+    title height=0
 ]{1}{13}
-\gantttitle{Project Timeline (Weeks)}{13} \\
-\gantttitlelist{1,...,13}{1} \\
 
-\ganttgroup{Planning \& Research}{1}{5} \\
-\ganttbar{Project Setup}{1}{1} \\
-\ganttbar{Intro \& Methodology}{1}{2} \\
-\ganttbar{Literature Review}{3}{5} \\
-
-\ganttgroup{Design \& Development}{4}{9} \\
-\ganttbar{System Design}{4}{5} \\
-\ganttbar{Template Analyser}{5}{6} \\
-\ganttbar{Data Retrieval Layer}{6}{7} \\
-\ganttbar{Content Planner}{7}{8} \\
-\ganttbar{Slide Builder}{8}{9} \\
-\ganttbar{Integration}{9}{10} \\
-
-\ganttgroup{Testing \& Evaluation}{10}{12} \\
-\ganttbar{Unit Testing}{10}{10} \\
-\ganttbar{Integration Testing}{10}{11} \\
-\ganttbar{User Evaluation}{11}{11} \\
-\ganttbar{Evaluation Chapter}{11}{12} \\
-
-\ganttgroup{Finalisation}{12}{13} \\
-\ganttbar{Document Review}{12}{12} \\
-\ganttbar{Final Edits}{13}{13} \\
-\ganttmilestone{Submission}{13}
+\ganttbar[bar height=1.2]{Intro + Methodology}{1}{3} \\
+\ganttbar[bar/.append style={fill=none, draw=none}]{}{1}{1} \\
+\ganttbar{Literature Review}{3}{6} \\
+\ganttbar{Research \& Design}{4}{7} \\
+\ganttbar{Implementation}{6}{10} \\
+\ganttbar{Evaluation}{10}{12} \\
+\ganttbar{Finalisation}{12}{13} \\
+\ganttbar[bar/.append style={fill=none, draw=none}]{}{1}{1} \\
+\ganttmilestone{Submission}{13} \\
+\ganttbar[bar/.append style={fill=none, draw=none}]{}{1}{1}
 
 \end{ganttchart}
-\caption{Project Gantt Chart (19th January -- 20th April 2026)}
+
+% Bottom axis labels at specific gridline positions
+\node[below, font=\small] at (0.5*1.18, -8.4) {19 Jan};
+\node[below, font=\small] at (2*1.18, -8.4) {1 Feb};
+\node[below, font=\small] at (6*1.18, -8.4) {1 Mar};
+\node[below, font=\small] at (10.5*1.18, -8.4) {1 Apr};
+\node[below, font=\small] at (12.3*1.18, -8.4) {20 Apr};
+
+\end{tikzpicture}
+\caption{Project Gantt Chart (19 January to 20 April 2026)}
 \label{fig:gantt-chart}
 \end{figure}
 
-Table~\ref{tab:project-milestones} provides detailed milestone descriptions with specific deliverables and dates.
+Table~\ref{tab:project-milestones} lists the milestones with their specific deliverables and target dates.
 
 \begin{table}[H]
 \centering
-\caption{Project Milestones and Deliverables}
-\label{tab:project-milestones}
-\begin{tabularx}{\textwidth}{|l|l|X|X|}
+\begin{tabularx}{\textwidth}{|l|l|L|L|}
 \hline
 \textbf{Phase} & \textbf{Date} & \textbf{Milestone} & \textbf{Deliverables} \\
 \hline
 1 & 19 Jan & Project Initiation & Repository setup, development environment configured \\
 \hline
-2 & 31 Jan & Documentation I & Introduction, Scope, Methodology chapters complete \\
+2 & 31 Jan & Initial Chapters & Introduction, Scope, Methodology chapters complete \\
 \hline
-3 & 21 Feb & Literature Review & Comprehensive literature review chapter complete \\
+3 & 21 Feb & Literature Review & Literature review chapter complete \\
 \hline
 4 & 28 Feb & Design Complete & Architecture diagrams, API specifications, data models \\
 \hline
@@ -580,24 +619,24 @@ Table~\ref{tab:project-milestones} provides detailed milestone descriptions with
 10 & 20 Apr & Submission & Final report submitted via QMPlus \\
 \hline
 \end{tabularx}
+\caption{Project Milestones and Deliverables}
+\label{tab:project-milestones}
 \end{table}
 
-\section{Risk Assessment and Mitigation}
+\subsection{Risk Assessment and Mitigation}
 \label{sec:risk-assessment}
 
-Proactive risk management identifies potential threats to project success and establishes mitigation strategies. Table~\ref{tab:risk-assessment} presents the risk register with likelihood and impact assessments on a three-point scale (Low/Medium/High).
+Effective risk management requires not only identifying risks and mitigations but also defining triggers that indicate when contingency actions should be activated. Table~\ref{tab:risk-assessment} shows the risk register with likelihood and impact rated on a three-point scale (Low, Medium, High).
 
 \begin{table}[H]
 \centering
-\caption{Risk Assessment and Mitigation Strategies}
-\label{tab:risk-assessment}
-\begin{tabularx}{\textwidth}{|l|X|l|l|X|}
+\begin{tabularx}{\textwidth}{|l|L|l|l|L|}
 \hline
 \textbf{ID} & \textbf{Risk Description} & \textbf{Likelihood} & \textbf{Impact} & \textbf{Mitigation Strategy} \\
 \hline
 R1 & API rate limits restrict data retrieval during development & Medium & Medium & Implement caching; use mock data for testing; stagger API calls \\
 \hline
-R2 & LLM outputs inconsistent or hallucinated content & High & High & Structured output schemas; validation layers; human-in-the-loop review \\
+R2 & LLM outputs inconsistent or hallucinated content & High & High & Structured output schemas; validation layers; HITL review \\
 \hline
 R3 & Template analysis fails on complex slide layouts & Medium & High & Scope to common layouts; graceful degradation for unsupported elements \\
 \hline
@@ -612,90 +651,178 @@ R7 & Data accuracy issues undermine credibility & Medium & High & Verification a
 R8 & Generated outputs violate compliance requirements & Low & High & Human review mandatory; disclaimer on all outputs; no PII processing \\
 \hline
 \end{tabularx}
+\caption{Risk Assessment and Mitigation Strategies}
+\label{tab:risk-assessment}
 \end{table}
 
-\section{Ethics, Data Governance and Compliance}
+For high-impact risks, I have defined contingency triggers: R2 (hallucination) triggers scope reduction if validation failure exceeds 20\%; R3 (template failure) triggers narrowed template support if extraction success falls below 70\%; R6 (time overrun) triggers dropping "Could have" requirements if milestones slip by more than one week. The risk register will be reviewed at fortnightly supervisor meetings.
+
+\subsection{Ethics, Data Governance and Compliance}
 \label{sec:ethics}
 
-Responsible AI development requires explicit consideration of ethical implications, data governance frameworks, and regulatory compliance. This section addresses these dimensions as they pertain to the project.
+The system keeps humans in control of analytical judgements. Generated content is marked as AI-assisted, and HITL design ensures professional review before distribution. The system prioritises accuracy over completeness, flagging uncertainty rather than presenting unverified information as fact.
 
-\subsection{Ethical Considerations}
+For data governance, the system processes only data needed for PB generation, with no retention of user inputs after sessions. All external data includes source attribution. The POC does not process personally identifiable information; company data comes exclusively from public sources.
 
-The system operates as a productivity augmentation tool, explicitly preserving human agency in analytical judgements and client communications. Several ethical principles guide development:
+Regarding compliance, the HITL architecture meets EU AI Act requirements for human oversight \parencite{bis2024regulating}. Professional responsibility for final content remains with the banker. The system logs generation parameters and data sources to support audit requirements.
 
-\textbf{Transparency}: Generated content is clearly identified as AI-assisted, enabling recipients to apply appropriate scrutiny. The system does not attempt to disguise its outputs as human-authored.
+\subsection{Project Tracking}
+\label{sec:tracking}
 
-\textbf{Accuracy}: Financial data retrieval prioritises accuracy over completeness. Where data quality cannot be assured, the system indicates uncertainty rather than presenting potentially incorrect information as authoritative.
+Progress will be tracked using GitHub Issues with a Kanban board (Backlog, In Progress, In Review, Done). Each functional requirement maps to one or more issues, providing traceability from requirements to implementation. Changes to scope or architecture will be documented in the issue history.
 
-\textbf{Human Oversight}: The human-in-the-loop design ensures that professionals review all outputs before client distribution. The system augments rather than replaces professional judgement.
+\subsection{Reusability}
+\label{sec:reusability}
 
-\subsection{Data Governance}
+The architecture separates concerns into independent modules (template analysis, data retrieval, content planning, slide assembly), each with clean interfaces for standalone reuse. All code will include Google-style docstrings, with a comprehensive README and architecture documentation. The codebase will be released under MIT License to minimise barriers to reuse.
 
-Data governance addresses the collection, processing, storage, and retention of information within the system. Key principles include:
+\section{Preliminary Research and Design Documentation}
+\label{sec:research-design}
 
-\textbf{Data Minimisation}: The system processes only data necessary for pitch book generation. User inputs are not retained beyond the generation session unless explicitly requested for precedent material purposes.
+{\small
+\begin{longtable}{|p{3.8cm}|p{1.5cm}|p{6.8cm}|p{0.8cm}|}
+\hline
+\textbf{Source} & \textbf{Type} & \textbf{Summary} & \textbf{Link} \\
+\hline
+\endfirsthead
+\hline
+\textbf{Source} & \textbf{Type} & \textbf{Summary} & \textbf{Link} \\
+\hline
+\endhead
+\hline
+\endfoot
+\hline
+\endlastfoot
 
-\textbf{Source Attribution}: All external data incorporated into generated outputs includes source attribution, enabling verification and supporting audit requirements.
+\rowcolor{headergray}\multicolumn{4}{|c|}{\textbf{Knowledge Management \& Knowledge Reuse}} \\
+\hline
+Markus (2001). Toward a Theory of Knowledge Reuse & Journal & Foundational theory on knowledge reuse; identifies four types of reuse situations and success factors & \href{https://doi.org/10.1080/07421222.2001.11045671}{\textcolor{blue}{\underline{Link}}} \\
+\hline
+Dalkir (2017). Knowledge Management in Theory and Practice & Textbook & Comprehensive KM textbook covering tacit/explicit knowledge and organisational memory systems & \href{https://mitpress.mit.edu/9780262036870/}{\textcolor{blue}{\underline{Link}}} \\
+\hline
 
-\textbf{No Personal Data Processing}: The proof-of-concept explicitly excludes processing of personal identifiable information. Company data derives from public sources; no client-specific confidential information enters the system.
+\rowcolor{headergray}\multicolumn{4}{|c|}{\textbf{Large Language Models}} \\
+\hline
+Zhao et al. (2023). A Survey of Large Language Models & Survey & Comprehensive survey on LLM development; covers GPT, LLaMA, PaLM families & \href{https://arxiv.org/abs/2303.18223}{\textcolor{blue}{\underline{Link}}} \\
+\hline
+Minaee et al. (2024). Large Language Models: A Survey & Survey & Reviews LLM characteristics, contributions, limitations, and augmentation techniques & \href{https://arxiv.org/abs/2402.06196}{\textcolor{blue}{\underline{Link}}} \\
+\hline
 
-\subsection{Regulatory Compliance}
+\rowcolor{headergray}\multicolumn{4}{|c|}{\textbf{Retrieval-Augmented Generation}} \\
+\hline
+Lewis et al. (2020). RAG for Knowledge-Intensive NLP Tasks & Conference & Seminal RAG paper; combines parametric and non-parametric memory for factual generation & \href{https://arxiv.org/abs/2005.11401}{\textcolor{blue}{\underline{Link}}} \\
+\hline
+Gao et al. (2023). RAG for LLMs: A Survey & Survey & Comprehensive RAG survey covering taxonomy, methods, and applications & \href{https://arxiv.org/abs/2312.10997}{\textcolor{blue}{\underline{Link}}} \\
+\hline
+Chen et al. (2025). RAG and LLMs for Enterprise KM & Journal & Systematic review of 63 studies; 63.6\% use GPT models, 80.5\% use FAISS/Elasticsearch & \href{https://www.mdpi.com/2076-3417/16/1/368}{\textcolor{blue}{\underline{Link}}} \\
+\hline
+Fan et al. (2024). A Survey on RAG Meeting LLMs & Conference & KDD survey on integrating RAG with LLMs & \href{https://doi.org/10.1145/3637528.3671470}{\textcolor{blue}{\underline{Link}}} \\
+\hline
 
-Financial services operate within stringent regulatory frameworks. While this proof-of-concept does not constitute a production system subject to full regulatory compliance, design decisions anticipate future requirements:
+\rowcolor{headergray}\multicolumn{4}{|c|}{\textbf{Agentic AI \& Autonomous Agents}} \\
+\hline
+Wang et al. (2024). A Survey on LLM-based Autonomous Agents & Journal & Foundational survey on LLM autonomous agents; proposes unified framework & \href{https://arxiv.org/abs/2308.11432}{\textcolor{blue}{\underline{Link}}} \\
+\hline
+Guo et al. (2024). LLM Based Multi-agents: A Survey & Conference & IJCAI survey on multi-agent LLM systems for complex problem-solving & \href{https://arxiv.org/abs/2402.01680}{\textcolor{blue}{\underline{Link}}} \\
+\hline
+Li et al. (2024). A survey on LLM-based multi-agent systems & Journal & Systematic review with five-component architecture framework & \href{https://arxiv.org/abs/2412.13093}{\textcolor{blue}{\underline{Link}}} \\
+\hline
 
-\textbf{AI Governance}: Emerging regulations including the EU AI Act establish requirements for AI systems in financial services \parencite{bis2024regulating}. The human-in-the-loop architecture aligns with requirements for human oversight of AI-assisted decision-making.
+\rowcolor{headergray}\multicolumn{4}{|c|}{\textbf{LLM Tool Use \& Function Calling}} \\
+\hline
+Li (2025). A review of paradigms for LLM-based agents & Conference & Reviews tool use, planning, RAG, and feedback mechanisms & \href{https://arxiv.org/abs/2406.05804}{\textcolor{blue}{\underline{Link}}} \\
+\hline
 
-\textbf{Content Accuracy}: Financial promotion regulations require accuracy in client communications. The system's design as a draft generation tool (requiring human review before distribution) maintains compliance by preserving professional responsibility for final content.
+\rowcolor{headergray}\multicolumn{4}{|c|}{\textbf{Automated Document Generation}} \\
+\hline
+Zheng et al. (2025). PPTAgent: Generating Presentations & Conference & Two-stage edit-based presentation generation; introduces PPTEval framework & \href{https://arxiv.org/abs/2501.03936}{\textcolor{blue}{\underline{Link}}} \\
+\hline
+Liu et al. (2024). We Need Structured Output & Conference & Studies user needs for structured LLM outputs in professional contexts & \href{https://doi.org/10.1145/3613905.3650756}{\textcolor{blue}{\underline{Link}}} \\
+\hline
 
-\textbf{Audit Trail}: The system logs generation parameters and data sources, supporting potential audit requirements for understanding how specific outputs were produced.
+\rowcolor{headergray}\multicolumn{4}{|c|}{\textbf{LLM Structured Output \& Prompt Engineering}} \\
+\hline
+Wu et al. (2024). LLM-Driven Structured Output: A Benchmark & Journal & Benchmark for structured outputs; compares fine-tuning, prompting, and RAG & \href{https://arxiv.org/abs/2411.00235}{\textcolor{blue}{\underline{Link}}} \\
+\hline
+Xu et al. (2025). Structured Data Generation with GPT-4o & Journal & Compares JSON, YAML, CSV prompt styles; JSON best for complex data & \href{https://arxiv.org/abs/2501.06466}{\textcolor{blue}{\underline{Link}}} \\
+\hline
 
-\chapter{System Design}
-\label{ch:system-design}
+\rowcolor{headergray}\multicolumn{4}{|c|}{\textbf{LLM Hallucination \& Factual Accuracy}} \\
+\hline
+Huang et al. (2024). A Survey on Hallucination in LLMs & Journal & Comprehensive taxonomy of hallucination causes, detection, and benchmarks & \href{https://doi.org/10.1145/3703155}{\textcolor{blue}{\underline{Link}}} \\
+\hline
+Alansari \& Luqman (2025). LLM Hallucination Survey & Survey & Review of hallucination causes, detection, and mitigation strategies & \href{https://doi.org/10.1145/3703633}{\textcolor{blue}{\underline{Link}}} \\
+\hline
 
-% TODO: System design content
+\rowcolor{headergray}\multicolumn{4}{|c|}{\textbf{Human-in-the-Loop AI}} \\
+\hline
+Wu et al. (2022). A Survey of HITL for ML & Journal & Classifies HITL approaches: data processing, interventional training, system design & \href{https://doi.org/10.1016/j.future.2022.05.014}{\textcolor{blue}{\underline{Link}}} \\
+\hline
+Mosqueira-Rey et al. (2024). HITL ML: Role of the user & Journal & Discusses timing, frequency, and workload factors in interactive ML & \href{https://doi.org/10.1016/j.iot.2023.101048}{\textcolor{blue}{\underline{Link}}} \\
+\hline
+Rezaeighaleh et al. (2023). Ethical AI Based on HITL & Journal & Examines HITL for ethical AI development & \href{https://doi.org/10.1016/j.clsr.2023.105825}{\textcolor{blue}{\underline{Link}}} \\
+\hline
 
-\chapter{Implementation}
-\label{ch:implementation}
+\rowcolor{headergray}\multicolumn{4}{|c|}{\textbf{AI in Financial Services}} \\
+\hline
+Alghofaili et al. (2024). AI and ML in Banking Systems & Journal & Examines board role in AI adoption; Saudi Arabian banking sector & \href{https://doi.org/10.1016/j.heliyon.2024.e36884}{\textcolor{blue}{\underline{Link}}} \\
+\hline
+Kumari \& Tanwar (2023). AI/ML in Financial Services & Journal & Bibliometric analysis of 1,045 BFSI sector articles & \href{https://doi.org/10.1016/j.joitmc.2023.100137}{\textcolor{blue}{\underline{Link}}} \\
+\hline
+\rowcolor{headergray}\multicolumn{4}{|c|}{\textbf{AI Regulation \& Compliance}} \\
+\hline
+Zetzsche et al. (2024). Regulating AI in investment management & Journal & Discusses EU AI Act, GDPR, MiFID II implications for AI & \href{https://doi.org/10.1093/jfr/fjad012}{\textcolor{blue}{\underline{Link}}} \\
+\hline
 
-% TODO: Implementation details
+\rowcolor{headergray}\multicolumn{4}{|c|}{\textbf{Knowledge Worker Productivity}} \\
+\hline
+Brynjolfsson et al. (2023). Generative AI at Work & Working Paper & 14\% productivity increase from AI; greatest impact on novice workers & \href{https://doi.org/10.3386/w31161}{\textcolor{blue}{\underline{Link}}} \\
+\hline
+Noy \& Zhang (2023). Productivity effects of generative AI & Journal & Experimental study showing productivity improvements from ChatGPT use & \href{https://doi.org/10.1126/science.adh2586}{\textcolor{blue}{\underline{Link}}} \\
+\hline
+McKinsey (2012). The Social Economy & Report & Knowledge workers spend 20\% of time searching for information & \href{https://www.mckinsey.com/industries/technology-media-and-telecommunications/our-insights/the-social-economy}{\textcolor{blue}{\underline{Link}}} \\
+\hline
 
-\chapter{Testing and Evaluation}
-\label{ch:testing}
+\rowcolor{headergray}\multicolumn{4}{|c|}{\textbf{Vision-Language Models for Documents}} \\
+\hline
+Faysse et al. (2024). ColPali: Document Retrieval with VLMs & Research & Uses VLM for direct PDF image retrieval; introduces ViDoRe benchmark & \href{https://arxiv.org/abs/2407.01449}{\textcolor{blue}{\underline{Link}}} \\
+\hline
+Liao et al. (2024). DocVLM: Efficient Reader & Conference & Integrates OCR into VLMs; improves DocVQA from 56\% to 86.6\% & \href{https://arxiv.org/abs/2412.10493}{\textcolor{blue}{\underline{Link}}} \\
+\hline
 
-% TODO: Testing methodology and results
+\rowcolor{headergray}\multicolumn{4}{|c|}{\textbf{Software Engineering Methodology}} \\
+\hline
+Anifa et al. (2024). Systematic Review on Agile Approach & Journal & Systematic review of agile methodology across industries & \href{https://doi.org/10.14569/IJACSA.2024.0150452}{\textcolor{blue}{\underline{Link}}} \\
+\hline
+Sommerville (2016). Software Engineering & Textbook & Standard software engineering reference; covers SDLC and methodologies & \href{https://www.pearson.com/en-us/subject-catalog/p/software-engineering/P200000003258}{\textcolor{blue}{\underline{Link}}} \\
+\hline
 
-\chapter{Results and Discussion}
-\label{ch:results}
+\end{longtable}
+}
 
-% TODO: Present and discuss results
+\newpage
+\section{Project Implementation and Outcomes}
+\label{sec:implementation}
 
-\chapter{Conclusion}
-\label{ch:conclusion}
-
-% TODO: Conclusions and future work
+\newpage
+\section{Evaluation and Conclusions}
+\label{sec:evaluation-conclusions}
 
 % --------------------------------------------
 % BACK MATTER
 % --------------------------------------------
 
 % Bibliography
+\newpage
 \printbibliography[heading=bibintoc]
 
 % Appendices
+\newpage
 \begin{appendices}
-
-\chapter{Risk Assessment}
-\label{app:risk-assessment}
 
 % TODO: Include risk assessment table
 
-\chapter{Project Plan}
-\label{app:project-plan}
-
 % TODO: Include Gantt chart or project timeline
-
-\chapter{KSB Mapping}
-\label{app:ksb-mapping}
 
 % TODO: Map project to apprenticeship Knowledge, Skills, and Behaviours
 

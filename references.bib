@@ -48,13 +48,16 @@
 % RAG AND KNOWLEDGE RETRIEVAL
 % ============================================
 
-@article{lewis2020rag,
+@inproceedings{lewis2020rag,
   author    = {Lewis, Patrick and Perez, Ethan and Piktus, Aleksandra and Petroni, Fabio and Karpukhin, Vladimir and Goyal, Naman and K{\"u}ttler, Heinrich and Lewis, Mike and Yih, Wen-tau and Rockt{\"a}schel, Tim and Riedel, Sebastian and Kiela, Douwe},
   title     = {Retrieval-Augmented Generation for Knowledge-Intensive {NLP} Tasks},
-  journal   = {Advances in Neural Information Processing Systems},
+  booktitle = {Advances in Neural Information Processing Systems},
   volume    = {33},
   pages     = {9459--9474},
-  year      = {2020}
+  year      = {2020},
+  publisher = {Curran Associates, Inc.},
+  eprint    = {2005.11401},
+  archiveprefix = {arXiv}
 }
 
 @article{gao2023rag,
@@ -188,6 +191,15 @@
 % INVESTMENT BANKING PRODUCTIVITY
 % ============================================
 
+@online{bbc2021goldmanjuniors,
+  author    = {{BBC News}},
+  title     = {Goldman Sachs junior bankers rebel over `inhumane' 100-hour weeks},
+  year      = {2021},
+  month     = mar,
+  url       = {https://www.bbc.co.uk/news/business-56452494},
+  urldate   = {2025-01-15}
+}
+
 @online{cfi2025analyst,
   author    = {{Corporate Finance Institute}},
   title     = {Investment Banking Analyst Job Description, Hours, and Salary},
@@ -211,6 +223,48 @@
 }
 
 % ============================================
+% KNOWLEDGE WORKER PRODUCTIVITY RESEARCH
+% ============================================
+
+@report{mckinsey2012social,
+  author    = {{McKinsey Global Institute}},
+  title     = {The Social Economy: Unlocking Value and Productivity Through Social Technologies},
+  institution = {McKinsey \& Company},
+  year      = {2012},
+  month     = jul,
+  url       = {https://www.mckinsey.com/industries/technology-media-and-telecommunications/our-insights/the-social-economy}
+}
+
+@report{accenture2024banking,
+  author    = {{Accenture}},
+  title     = {Banking on {AI}: Banking Top 10 Trends for 2024},
+  institution = {Accenture},
+  year      = {2024},
+  url       = {https://www.accenture.com/content/dam/accenture/final/industry/banking/document/Accenture-Banking-Top-10-Trends-2024.pdf}
+}
+
+@report{mckinsey2024genaibanking,
+  author    = {{McKinsey \& Company}},
+  title     = {Capturing the Full Value of Generative {AI} in Banking},
+  institution = {McKinsey \& Company},
+  year      = {2024},
+  url       = {https://www.mckinsey.com/industries/financial-services/our-insights/capturing-the-full-value-of-generative-ai-in-banking}
+}
+
+@article{wang2023llmagents,
+  author    = {Wang, Lei and Ma, Chen and Feng, Xueyang and Zhang, Zeyu and Yang, Hao and Zhang, Jingsen and Chen, Zhiyuan and Tang, Jiakai and Chen, Xu and Lin, Yankai and Zhao, Wayne Xin and Wei, Zhewei and Wen, Ji-Rong},
+  title     = {A Survey on Large Language Model based Autonomous Agents},
+  journal   = {Frontiers of Computer Science},
+  volume    = {18},
+  number    = {6},
+  pages     = {186345},
+  year      = {2024},
+  eprint    = {2308.11432},
+  archiveprefix = {arXiv},
+  doi       = {10.1007/s11704-024-40231-1}
+}
+
+% ============================================
 % KNOWLEDGE MANAGEMENT
 % ============================================
 
@@ -222,7 +276,8 @@
   number    = {1},
   pages     = {57--93},
   year      = {2001},
-  publisher = {Taylor \& Francis}
+  publisher = {Taylor \& Francis},
+  doi       = {10.1080/07421222.2001.11045671}
 }
 
 @article{radhakrishna2024km,
@@ -236,12 +291,14 @@
   doi       = {10.1177/20597991241287118}
 }
 
-@book{dalkir2005km,
+@book{dalkir2011km,
   author    = {Dalkir, Kimiz},
   title     = {Knowledge Management in Theory and Practice},
-  publisher = {Elsevier Butterworth-Heinemann},
-  year      = {2005},
-  address   = {Burlington, MA}
+  edition   = {2nd},
+  publisher = {MIT Press},
+  year      = {2011},
+  address   = {Cambridge, MA},
+  isbn      = {978-0262015080}
 }
 
 @article{pmcknowledge2020,
@@ -330,4 +387,300 @@
   year      = {1988},
   publisher = {IEEE},
   doi       = {10.1109/2.59}
+}
+
+% ============================================
+% LITERATURE REVIEW SOURCES
+% ============================================
+
+% --- Large Language Models ---
+
+@article{zhao2023llmsurvey,
+  author    = {Zhao, Wayne Xin and Zhou, Kun and Li, Junyi and Tang, Tianyi and Wang, Xiaolei and Hou, Yupeng and Min, Yingqian and Zhang, Beichen and Zhang, Junjie and Dong, Zican and Du, Yifan and Yang, Chen and Chen, Yushuo and Chen, Zhipeng and Jiang, Jinhao and Ren, Ruiyang and Li, Yifan and Tang, Xinyu and Liu, Zikang and Liu, Peiyu and Nie, Jian-Yun and Wen, Ji-Rong},
+  title     = {A Survey of Large Language Models},
+  journal   = {arXiv preprint},
+  year      = {2023},
+  eprint    = {2303.18223},
+  archiveprefix = {arXiv},
+  doi       = {10.48550/arXiv.2303.18223}
+}
+
+@article{minaee2024llmsurvey,
+  author    = {Minaee, Shervin and Mikolov, Tomas and Nikzad, Narjes and Chenaghlu, Meysam and Socher, Richard and Amatriain, Xavier and Gao, Jianfeng},
+  title     = {Large Language Models: A Survey},
+  journal   = {arXiv preprint},
+  year      = {2024},
+  eprint    = {2402.06196},
+  archiveprefix = {arXiv},
+  doi       = {10.48550/arXiv.2402.06196}
+}
+
+% --- Retrieval-Augmented Generation ---
+
+@inproceedings{fan2024ragsurvey,
+  author    = {Fan, Wenqi and Ding, Yujuan and Ning, Liangbo and Wang, Shijie and Li, Hengyun and Yin, Dawei and Chua, Tat-Seng and Li, Qing},
+  title     = {A Survey on {RAG} Meeting {LLMs}: Towards Retrieval-Augmented Large Language Models},
+  booktitle = {Proceedings of the 30th ACM SIGKDD Conference on Knowledge Discovery and Data Mining},
+  year      = {2024},
+  publisher = {ACM},
+  doi       = {10.1145/3637528.3671470}
+}
+
+% --- Agentic AI & Autonomous Agents ---
+
+@inproceedings{guo2024multiagent,
+  author    = {Guo, Taicheng and Chen, Xiuying and Wang, Yaqi and Chang, Ruidi and Pei, Shichao and Chawla, Nitesh V. and Wiest, Olaf and Zhang, Xiangliang},
+  title     = {Large Language Model Based Multi-Agents: A Survey of Progress and Challenges},
+  booktitle = {Proceedings of the 33rd International Joint Conference on Artificial Intelligence (IJCAI)},
+  year      = {2024},
+  eprint    = {2402.01680},
+  archiveprefix = {arXiv}
+}
+
+@article{li2024multiagent,
+  author    = {Li, Shuhe and Wang, Lu and Fang, Siwei and Li, Zeyu and Tang, Ke and Du, Yun and Wang, Shuo and Wang, Rui and Yu, Wenjie and Chen, Xu and Zhang, Ji-Rong and Wen, Ji-Rong},
+  title     = {A Survey on {LLM}-based Multi-agent Systems: Workflow, Infrastructure, and Challenges},
+  journal   = {arXiv preprint},
+  year      = {2024},
+  eprint    = {2412.13093},
+  archiveprefix = {arXiv}
+}
+
+% --- LLM Tool Use & Function Calling ---
+
+@article{qulitoollearning2025,
+  author    = {Qu, Changle and Dai, Sunhao and Wei, Xiaochi and Cai, Hengyi and Wang, Shuaiqiang and Yin, Dawei and Xu, Jun and Wen, Ji-Rong},
+  title     = {Tool Learning with Large Language Models: A Survey},
+  journal   = {Frontiers of Computer Science},
+  year      = {2025},
+  volume    = {19},
+  number    = {8},
+  pages     = {198343},
+  publisher = {Springer},
+  doi       = {10.1007/s11704-024-40343-8}
+}
+
+@inproceedings{li2025paradigms,
+  author    = {Li, Qingyun and Wang, Chi and Zhang, Qi and Qin, Zhen and Liu, Zhaoyang and Han, Yue},
+  title     = {A Review of Prominent Paradigms for {LLM}-Based Agents: Tool Use, {RAG}, and Code Interpreters},
+  booktitle = {Proceedings of the AAAI Conference on Artificial Intelligence},
+  year      = {2025},
+  eprint    = {2406.05804},
+  archiveprefix = {arXiv}
+}
+
+% --- LLM Structured Output & Prompt Engineering ---
+
+@article{wu2024structuredbenchmark,
+  author    = {Wu, Yuyi and Wei, Zheng and Liu, Ziyang and Zhou, Wangchunshu and Zhou, Yilun and Zhao, Wenhao},
+  title     = {{LLM}-Driven Structured Output: A Benchmark Study Comparing Fine-tuning, Prompting, and Retrieval-Based Methods},
+  journal   = {arXiv preprint},
+  year      = {2024},
+  eprint    = {2411.00235},
+  archiveprefix = {arXiv}
+}
+
+@article{xu2025gpt4ostructured,
+  author    = {Xu, Yiran and Wu, Zhili and Chen, Zifeng and Yang, Haoyu},
+  title     = {Enhancing Structured Data Generation with {GPT-4o}: A Comparison of Prompt Styles},
+  journal   = {arXiv preprint},
+  year      = {2025},
+  eprint    = {2501.06466},
+  archiveprefix = {arXiv}
+}
+
+% --- LLM Hallucination & Factual Accuracy ---
+
+@article{huang2024hallucination,
+  author    = {Huang, Lei and Yu, Weijiang and Ma, Weitao and Zhong, Weihong and Feng, Zhangyin and Wang, Haotian and Chen, Qianglong and Peng, Weihua and Feng, Xiaocheng and Qin, Bing and Liu, Ting},
+  title     = {A Survey on Hallucination in Large Language Models: Principles, Taxonomy, Challenges, and Open Questions},
+  journal   = {ACM Computing Surveys},
+  year      = {2024},
+  publisher = {ACM},
+  doi       = {10.1145/3703155}
+}
+
+@article{alansari2025hallucination,
+  author    = {Alansari, Asmaa and Luqman, Hamzah},
+  title     = {Hallucination in Large Language Models: A Survey with Taxonomy and Mitigation Strategies},
+  journal   = {ACM Computing Surveys},
+  year      = {2025},
+  volume    = {57},
+  number    = {8},
+  publisher = {ACM},
+  doi       = {10.1145/3703633}
+}
+
+% --- Human-in-the-Loop AI ---
+
+@article{wu2022hitl,
+  author    = {Wu, Xingjiao and Xiao, Luwei and Sun, Yixuan and Zhang, Junhang and Ma, Tianlong and He, Liang},
+  title     = {A Survey of Human-in-the-Loop for Machine Learning},
+  journal   = {Future Generation Computer Systems},
+  volume    = {135},
+  pages     = {364--381},
+  year      = {2022},
+  publisher = {Elsevier},
+  doi       = {10.1016/j.future.2022.05.014}
+}
+
+@article{mosqueira2024hitl,
+  author    = {Mosqueira-Rey, Eduardo and Hern{\'a}ndez-Pereira, Elena and Alonso-R{\'\i}os, David and Bobes-Bascara{\'\i}n, Jos{\'e} and Fern{\'a}ndez-Leal, {\'A}ngel},
+  title     = {Human-in-the-loop Machine Learning: Reconceptualizing the Role of the User in Interactive Approaches},
+  journal   = {Internet of Things},
+  volume    = {25},
+  pages     = {101048},
+  year      = {2024},
+  publisher = {Elsevier},
+  doi       = {10.1016/j.iot.2023.101048}
+}
+
+@article{rezaeighaleh2023ethical,
+  author    = {Rezaeighaleh, Hossein and Mashatan, Atefeh and Sohrabi, Sameera},
+  title     = {Constructing Ethical {AI} Systems Based on Human-in-the-Loop Approaches},
+  journal   = {Computer Law \& Security Review},
+  volume    = {50},
+  pages     = {105825},
+  year      = {2023},
+  publisher = {Elsevier},
+  doi       = {10.1016/j.clsr.2023.105825}
+}
+
+% --- AI in Financial Services ---
+
+@article{alghofaili2024aibanking,
+  author    = {Alghofaili, Yasser and Albugami, Suad and Alotaibi, Naif R. and Alassafi, Madini O.},
+  title     = {Adoption of Artificial Intelligence and Machine Learning in Banking Systems: A Quantitative Study},
+  journal   = {Heliyon},
+  volume    = {10},
+  number    = {17},
+  pages     = {e36884},
+  year      = {2024},
+  publisher = {Elsevier},
+  doi       = {10.1016/j.heliyon.2024.e36884}
+}
+
+@article{kumari2023aifinance,
+  author    = {Kumari, Anita and Tanwar, Sudeep},
+  title     = {A Comprehensive Study on Applications of Artificial Intelligence and Machine Learning in the Financial Services Sector},
+  journal   = {Journal of Open Innovation: Technology, Market, and Complexity},
+  volume    = {9},
+  number    = {4},
+  pages     = {100137},
+  year      = {2023},
+  publisher = {Elsevier},
+  doi       = {10.1016/j.joitmc.2023.100137}
+}
+
+@article{khan2024aibankingsector,
+  author    = {Khan, Waseem and Ghazanfar, Mustansar Ali and Azam, Muhammad Ali and Ullah, Aman and Iqbal, Mudassar},
+  title     = {Artificial Intelligence in the Financial Sector: Applications, Benefits, Challenges, and Ethics},
+  journal   = {International Journal of Human-Computer Interaction},
+  year      = {2024},
+  publisher = {Taylor \& Francis},
+  doi       = {10.1080/10447318.2024.2427468}
+}
+
+@article{iqbal2023banking40,
+  author    = {Iqbal, Muhammad and Nisha, Nadia and Raza, Syed Alfaraz and Shahbaz, Muhammad and Zulfiqar, Farah},
+  title     = {Banking 4.0: Artificial Intelligence and Its Integration into the Banking Industry},
+  journal   = {Journal of Global Information Management},
+  volume    = {31},
+  number    = {6},
+  pages     = {1--27},
+  year      = {2023},
+  publisher = {IGI Global},
+  doi       = {10.4018/JGIM.326045}
+}
+
+% --- AI Regulation & Compliance ---
+
+@article{bartolini2024aiactbanks,
+  author    = {Bartolini, Cesare and Calabr{\`o}, Guido and Marchetti, Pietro},
+  title     = {{EU} {AI} Act Compliance Challenges for Financial Institutions: Interrelationships with {GDPR} and Sectoral Regulations},
+  journal   = {European Business Law Review},
+  volume    = {35},
+  number    = {3},
+  pages     = {467--498},
+  year      = {2025},
+  publisher = {Kluwer Law International}
+}
+
+@article{zetzsche2024regulatingai,
+  author    = {Zetzsche, Dirk A. and Arner, Douglas W. and Buckley, Ross P.},
+  title     = {Future Themes in Regulating {AI} in Investment Management},
+  journal   = {Journal of Financial Regulation},
+  volume    = {10},
+  number    = {1},
+  pages     = {50--80},
+  year      = {2024},
+  publisher = {Oxford University Press},
+  doi       = {10.1093/jfr/fjad012}
+}
+
+% --- Knowledge Worker Productivity ---
+
+@article{brynjolfsson2023genai,
+  author    = {Brynjolfsson, Erik and Li, Danielle and Raymond, Lindsey R.},
+  title     = {Generative {AI} at Work},
+  journal   = {NBER Working Paper},
+  number    = {31161},
+  year      = {2023},
+  doi       = {10.3386/w31161}
+}
+
+@article{noy2023productivity,
+  author    = {Noy, Shakked and Zhang, Whitney},
+  title     = {Experimental Evidence on the Productivity Effects of Generative Artificial Intelligence},
+  journal   = {Science},
+  volume    = {381},
+  number    = {6654},
+  pages     = {187--192},
+  year      = {2023},
+  publisher = {AAAS},
+  doi       = {10.1126/science.adh2586}
+}
+
+% --- Vision-Language Models for Documents ---
+
+@article{faysse2024colpali,
+  author    = {Faysse, Manuel and Sibille, Hugues and Hergot, Tony and Music, Iaroslav and Morin, Christophe and Kerkmann, Maxime and Ciancone, Loic},
+  title     = {{ColPali}: Efficient Document Retrieval with Vision Language Models},
+  journal   = {arXiv preprint},
+  year      = {2024},
+  eprint    = {2407.01449},
+  archiveprefix = {arXiv}
+}
+
+@inproceedings{liao2024docvlm,
+  author    = {Liao, Haoyu and Xia, Jianning and Gao, Chao and Zhou, Pan and Hong, Xiao},
+  title     = {{DocVLM}: Make Your {VLM} an Efficient Reader},
+  booktitle = {Proceedings of the AAAI Conference on Artificial Intelligence},
+  year      = {2024},
+  eprint    = {2412.10493},
+  archiveprefix = {arXiv}
+}
+
+% --- Software Engineering Methodology ---
+
+@article{anifa2024agile,
+  author    = {Anifa, Siti and others},
+  title     = {A Systematic Literature Review on Agile Approach in Software Development},
+  journal   = {International Journal of Advanced Computer Science and Applications},
+  volume    = {15},
+  number    = {4},
+  year      = {2024},
+  publisher = {Science and Information Organization},
+  doi       = {10.14569/IJACSA.2024.0150452}
+}
+
+@article{anwar2024agileempirical,
+  author    = {Anwar, Sohail and Khan, Muhammad Fahad and Sarwar, Aamir and Rasheed, Fazal},
+  title     = {An Empirical Study of Agile Software Development Methodologies: A Comparative Analysis},
+  journal   = {IEEE Access},
+  volume    = {12},
+  pages     = {14568--14582},
+  year      = {2024},
+  publisher = {IEEE},
+  doi       = {10.1109/ACCESS.2024.3355988}
 }
