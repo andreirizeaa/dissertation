@@ -1,0 +1,60 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Build PDF (latexmk)",
+            "type": "shell",
+            "command": "latexmk",
+            "args": [
+                "-pdf",
+                "-synctex=1",
+                "-interaction=nonstopmode",
+                "-file-line-error",
+                "diss.tex"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": [
+                "$pdflatex"
+            ],
+            "presentation": {
+                "reveal": "always",
+                "panel": "new"
+            }
+        },
+        {
+            "label": "Clean auxiliary files",
+            "type": "shell",
+            "command": "latexmk",
+            "args": [
+                "-c"
+            ],
+            "problemMatcher": []
+        },
+        {
+            "label": "Clean all (including PDF)",
+            "type": "shell",
+            "command": "latexmk",
+            "args": [
+                "-C"
+            ],
+            "problemMatcher": []
+        },
+        {
+            "label": "Watch and rebuild",
+            "type": "shell",
+            "command": "latexmk",
+            "args": [
+                "-pdf",
+                "-pvc",
+                "-synctex=1",
+                "-interaction=nonstopmode",
+                "diss.tex"
+            ],
+            "isBackground": true,
+            "problemMatcher": []
+        }
+    ]
+}

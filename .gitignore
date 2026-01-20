@@ -1,0 +1,115 @@
+# LaTeX auxiliary files
+*.aux
+*.lof
+*.log
+*.lot
+*.fls
+*.out
+*.toc
+*.fmt
+*.fot
+*.cb
+*.cb2
+.*.lb
+
+# Bibliography auxiliary files
+*.bbl
+*.bcf
+*.blg
+*-blx.aux
+*-blx.bib
+*.run.xml
+
+# Build tool auxiliary files
+*.fdb_latexmk
+*.synctex
+*.synctex(busy)
+*.synctex.gz
+*.synctex.gz(busy)
+*.pdfsync
+
+# Glossary/Acronym files
+*.acn
+*.acr
+*.alg
+*.glg
+*.glo
+*.gls
+*.glsdefs
+*.ist
+
+# Index files
+*.idx
+*.ilg
+*.ind
+
+# Listings
+*.lol
+
+# Packages auxiliary files
+*.nav
+*.pre
+*.snm
+*.vrb
+
+# knitr
+*-concordance.tex
+
+# beamer
+*.nav
+*.snm
+
+# Makeindex log files
+*.mlg
+*.maf
+*.mtc
+*.mtc0
+
+# minitoc
+*.maf
+*.mtc
+*.mtc0
+*.mtc1
+*.mtc2
+*.mtc3
+*.mtc4
+*.mtc5
+*.mtc6
+*.mtc7
+*.mtc8
+*.mtc9
+
+# PDF output (uncomment if you don't want to track)
+# *.pdf
+
+# Temporary files
+*~
+\#*\#
+.#*
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# VS Code
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# Backup files
+*.bak
+*.backup
+
+# LaTeXiT
+*.ltx
+
+# Texpad
+.texpadtmp
+
+# Output directories (uncomment if using)
+# build/
+# out/

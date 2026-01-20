@@ -1,0 +1,313 @@
+\documentclass[12pt,a4paper]{report}
+
+% ============================================
+% PACKAGES
+% ============================================
+
+% Encoding and fonts
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+
+% Page layout
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{setspace}
+\onehalfspacing
+
+% Graphics and figures
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{subcaption}
+\graphicspath{{figures/}}
+
+% Tables
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{tabularx}
+\usepackage{multirow}
+
+% Math
+\usepackage{amsmath}
+\usepackage{amssymb}
+
+% Code listings
+\usepackage{listings}
+\usepackage{xcolor}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,
+    breaklines=true,
+    captionpos=b,
+    keepspaces=true,
+    numbers=left,
+    numbersep=5pt,
+    showspaces=false,
+    showstringspaces=false,
+    showtabs=false,
+    tabsize=2
+}
+\lstset{style=mystyle}
+
+% Hyperlinks
+\usepackage[hidelinks]{hyperref}
+\usepackage{url}
+
+% Bibliography
+\usepackage[
+    backend=biber,
+    style=authoryear,
+    sorting=nyt,
+    maxcitenames=2
+]{biblatex}
+\addbibresource{references.bib}
+
+% Glossaries and acronyms
+\usepackage[acronym,toc]{glossaries}
+\makeglossaries
+
+% Headers and footers
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\leftmark}
+\fancyhead[R]{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+% Appendices
+\usepackage[toc,page]{appendix}
+
+% ============================================
+% ACRONYMS
+% ============================================
+
+\newacronym{pb}{PB}{Pitch Book}
+\newacronym{ib}{IB}{Investment Banking}
+\newacronym{rag}{RAG}{Retrieval-Augmented Generation}
+\newacronym{mmg}{MMG}{Multi-Media Generation}
+\newacronym{llm}{LLM}{Large Language Model}
+\newacronym{vlm}{VLM}{Vision Language Model}
+\newacronym{pm}{PM}{Precedence Material}
+\newacronym{api}{API}{Application Programming Interface}
+\newacronym{sdlc}{SDLC}{Software Development Lifecycle}
+\newacronym{acid}{ACID}{Atomicity-Consistency-Isolation-Durability}
+
+% ============================================
+% DOCUMENT INFO
+% ============================================
+
+\title{Compliance Aware, Agentic Pitch Book Generation For Bankers}
+\author{Andrei Rizea}
+\date{\today}
+
+% ============================================
+% DOCUMENT
+% ============================================
+
+\begin{document}
+
+% --------------------------------------------
+% FRONT MATTER
+% --------------------------------------------
+
+% Title Page
+\begin{titlepage}
+    \centering
+    \vspace*{2cm}
+
+    {\Huge\bfseries Compliance Aware, Agentic Pitch Book Generation For Bankers\par}
+
+    \vspace{1cm}
+
+    {\Large An all-in-one content generation tool providing agentic workflows with RAG search capabilities.\par}
+
+    \vfill
+
+    {\Large A Queen Mary Final Year Dissertation\par}
+
+    \vspace{1cm}
+
+    {\large\bfseries Andrei Rizea\par}
+    {\large Student ID: 220300153\par}
+
+    \vspace{1cm}
+
+    {\large Supervised by: Manesha Peiris\par}
+
+    \vspace{1cm}
+
+    {\large Programme of Study:\par}
+    {\large Digital \& Technology Solutions (Software Engineering)\par}
+
+    \vspace{1cm}
+
+    {\large Module: IOT635W\par}
+
+    \vfill
+
+    % Add Queen Mary logo here if available
+    % \includegraphics[width=0.3\textwidth]{qmul-logo}
+
+    \vspace{1cm}
+
+    {\large Queen Mary University of London\par}
+    {\large \today\par}
+
+\end{titlepage}
+
+% Abstract
+\begin{abstract}
+\addcontentsline{toc}{chapter}{Abstract}
+% TODO: Write abstract
+\end{abstract}
+
+% Acknowledgements
+\chapter*{Acknowledgements}
+\addcontentsline{toc}{chapter}{Acknowledgements}
+% TODO: Write acknowledgements
+
+% Table of Contents
+\tableofcontents
+\listoffigures
+\listoftables
+\printglossary[type=\acronymtype,title=List of Acronyms]
+
+% --------------------------------------------
+% MAIN MATTER
+% --------------------------------------------
+
+\chapter{Introduction}
+\label{ch:introduction}
+
+\section{Problem Statement}
+\label{sec:problem-statement}
+
+\Gls{pb}s, used in sales presentations to win client business, are key to \gls{ib} yet junior bankers spend nearly 50\% of their time creating them \parencite{introhive2021}. \Gls{pb}s are highly repetitive in structure, data, and phrasing, with little differences apart from routine contextual updates. This makes for an ideal candidate for AI automations. However, this inefficiency persists across the industry, raising the question of why this process has not been streamlined yet.
+
+This introduces three problems:
+
+\subsection{Reduced Productivity}
+A lot of time is spent manually creating \gls{pb}s, refreshing data, and iterating on style. This moves the attention away from analytical and client-focused work, reducing productivity.
+
+\subsection{Scattered Precedence Material}
+Since each banker creates their own \gls{pb}s, \gls{pm} (historic deal data and \gls{pb}s used for reference) is scattered and individualised resulting in no centralised sources, introducing data retrieval delays.
+
+\subsection{Tough Learning Curves}
+As \gls{pb}s depend on bank specific templates, data-sourcing processes and narrative expectations, analysts often struggle to produce slides correctly on their first attempts. This results in repeated cycles potentially delaying deadlines.
+
+\section{Project Aims}
+\label{sec:project-aims}
+
+\subsection{Organisational}
+The project aims to deliver a platform that automates \gls{pb} generation while providing a centralised source of \gls{pm}. With \gls{mmg}, \gls{rag} and agentic workflows, \gls{pb}s can be generated, data sourcing streamlined hence, significantly reducing the manual work required.
+
+\subsection{Educational}
+We'll explore how AI methods, specifically \gls{rag}, agentic workflows, and \gls{mmg} can be integrated to address real inefficiencies. \Gls{mmg} presents unique challenges as it must combine narratives, data, visuals, and slide design into coherent outputs. Agentic workflows further raise concerns such as how to integrate into existing systems taking into account permissions and responsibilities as it's difficult to distinguish between a human and an agentic user.
+
+\section{Objectives}
+\label{sec:objectives}
+
+\subsection{PB Generation}
+The application should automatically generate \gls{pb}s in varying formats, requiring only minimal user input. For example, deal context (company, date range, sector etc). This is to ensure the model is accurately grounded.
+
+\subsection{Agentic Workflows}
+During generation, the solution must be able to research company and financial data from public or vendor data sources automatically. It should search the web and other sources such as vendor data.
+
+\subsection{Precedence Material}
+Storage of previously generated \gls{pb}s is important, providing a single source for \gls{pm}, simplifying data retrieval. A \gls{rag} search should then query across all this historical data.
+
+\section{Report Structure}
+\label{sec:report-structure}
+% TODO: Describe the structure of the dissertation
+
+\chapter{Literature Review}
+\label{ch:literature-review}
+
+% TODO: Expand literature review
+
+\chapter{Methodology}
+\label{ch:methodology}
+
+\section{Software Development Lifecycle}
+An agile \gls{sdlc} methodology is being used. This is because it emphasises rapid iteration and close user feedback-loops. Prototypes will be shown to power users for feedback after each phase and relevant literature will be reviewed continuously which will help guide the project.
+
+\section{Project Milestones}
+% TODO: Detail milestones
+
+\chapter{System Design}
+\label{ch:system-design}
+
+\section{Architecture Overview}
+% TODO: Include system architecture diagram
+
+\section{Technologies}
+\label{sec:technologies}
+
+\subsection{Frontend}
+React TypeScript will be used, deployed via Vercel rather than AWS due to its one-click simple deployments. TypeScript provides code durability using strict typing while React allows for component driven development.
+
+\subsection{Database}
+Supabase is a PostgreSQL database. It provides file storage, authentication and \gls{acid} compliant transactions ensuring reliability. It also supports complex queries and has extensive documentation helping integration and debugging.
+
+\subsection{Backend}
+Python is used over Java because it's the standard language for AI development. It supports libraries such as Hugging Face and TensorFlow, allowing for integration with different models.
+
+\subsection{API}
+FastAPI provides asynchronous I/O handling allowing for multiple simultaneous requests ensuring stability, chosen over GraphQL which is a heavyweight service requiring schemas and resolvers, deployed via Render due to its simplicity.
+
+\subsection{AI}
+GPT5.1 (\gls{llm}) and Gemini-3-pro (\gls{vlm}) will be used as they rank above all other companies for the most benchmarks. OpenAI Agent builder will be used allowing workflows to be built and triggered via their Python library.
+
+\chapter{Implementation}
+\label{ch:implementation}
+
+% TODO: Implementation details
+
+\chapter{Testing and Evaluation}
+\label{ch:testing}
+
+% TODO: Testing methodology and results
+
+\chapter{Results and Discussion}
+\label{ch:results}
+
+% TODO: Present and discuss results
+
+\chapter{Conclusion}
+\label{ch:conclusion}
+
+% TODO: Conclusions and future work
+
+% --------------------------------------------
+% BACK MATTER
+% --------------------------------------------
+
+% Bibliography
+\printbibliography[heading=bibintoc]
+
+% Appendices
+\begin{appendices}
+
+\chapter{Risk Assessment}
+\label{app:risk-assessment}
+
+% TODO: Include risk assessment table
+
+\chapter{Project Plan}
+\label{app:project-plan}
+
+% TODO: Include Gantt chart or project timeline
+
+\end{appendices}
+
+\end{document}
