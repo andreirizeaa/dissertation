@@ -289,7 +289,7 @@ My project addresses this gap. The pipeline extracts layouts, colour palettes, a
 \subsection{Aims and Objectives}
 \label{sec:aims-objectives}
 
-The aim is to design, build, and test a proof-of-concept (POC) demonstrating how AI-powered document generation can tackle the knowledge reuse problems described above. The system must respect institutional templates throughout; if it generates slides that do not match the house style, the whole thing fails.
+The aim is to design, build, and test a proof-of-concept (POC) demonstrating how AI-powered document generation can tackle the knowledge reuse problems described above. The system must respect institutional templates throughout. If it generates slides that do not match the house style, the whole thing fails.
 
 On the business side, I want a workflow where an analyst can provide minimal input and get back a solid first draft. That would cut the time spent on formatting grunt work while keeping humans in control of the actual analysis. The target users are junior analysts, the people who currently spend most of their hours on document preparation.
 
@@ -310,7 +310,7 @@ Five objectives structure the work:
 
 The POC takes user input (company, transaction type, dates, reference template, PB type) and produces a formatted PowerPoint. Target PB types are company overviews, market updates, and transaction summaries. Full valuation presentations are out of scope.
 
-Design choices: established agentic frameworks rather than custom architecture; programmatic template extraction with python-pptx rather than vision models; public APIs only; RAG as a stretch goal. Out of scope: real-time data feeds, production infrastructure, compliance validation. Deal positioning and valuation judgements stay with analysts. Practical limits: one academic term, standard hardware, student API budget.
+Design choices: established agentic frameworks rather than custom architecture, programmatic template extraction with python-pptx rather than vision models, public APIs only, and RAG as a stretch goal. Out of scope: real-time data feeds, production infrastructure, compliance validation. Deal positioning and valuation judgements stay with analysts. Practical limits: one academic term, standard hardware, student API budget.
 
 Success criteria:
 
@@ -358,7 +358,7 @@ Research integration & Poor & Moderate & Excellent \\
 \label{tab:methodology-comparison}
 \end{table}
 
-I will use a hybrid methodology combining iterative prototyping with structured research engineering practices. Pure Waterfall cannot accommodate the exploratory nature of this work; full Scrum adds overhead without benefit for a solo developer. Iterative prototyping preserves flexibility while layered engineering practices ensure reproducibility.
+I will use a hybrid methodology combining iterative prototyping with structured research engineering practices. Pure Waterfall cannot accommodate the exploratory nature of this work. Full Scrum adds overhead without benefit for a solo developer. Iterative prototyping preserves flexibility while layered engineering practices ensure reproducibility.
 
 Each two-week iteration will produce a working prototype targeting defined requirements. At each cycle's end, I will conduct a retrospective review and document outcomes. Feedback from fortnightly supervisor meetings and, where possible, IB practitioners will shape subsequent cycles.
 
@@ -669,14 +669,14 @@ R8 & Generated outputs violate compliance requirements & Low & High & Human revi
 \label{tab:risk-assessment}
 \end{table}
 
-For high-impact risks, I have defined contingency triggers: R2 (hallucination) triggers scope reduction if validation failure exceeds 20\%; R3 (template failure) triggers narrowed template support if extraction success falls below 70\%; R6 (time overrun) triggers dropping "Could have" requirements if milestones slip by more than one week. The risk register will be reviewed at fortnightly supervisor meetings.
+For high-impact risks, I have defined contingency triggers. R2 (hallucination) triggers scope reduction if validation failure exceeds 20\%. R3 (template failure) triggers narrowed template support if extraction success falls below 70\%. R6 (time overrun) triggers dropping "Could have" requirements if milestones slip by more than one week. The risk register will be reviewed at fortnightly supervisor meetings.
 
 \subsection{Ethics, Data Governance and Compliance}
 \label{sec:ethics}
 
 The system keeps humans in control of analytical judgements. Generated content is marked as AI-assisted, and HITL design ensures professional review before distribution. The system prioritises accuracy over completeness, flagging uncertainty rather than presenting unverified information as fact.
 
-For data governance, the system processes only data needed for PB generation, with no retention of user inputs after sessions. All external data includes source attribution. The POC does not process personally identifiable information; company data comes exclusively from public sources.
+For data governance, the system processes only data needed for PB generation, with no retention of user inputs after sessions. All external data includes source attribution. The POC does not process personally identifiable information. Company data comes exclusively from public sources.
 
 Regarding compliance, the HITL architecture meets EU AI Act requirements for human oversight \parencite{bis2024regulating}. Professional responsibility for final content remains with the banker. The system logs generation parameters and data sources to support audit requirements.
 
