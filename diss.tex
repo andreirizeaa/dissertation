@@ -239,7 +239,7 @@
 \section{Introduction, Scope and Context}
 \label{sec:introduction}
 
-McKinsey found knowledge workers spend a fifth of their time searching for information \parencite{mckinsey2012social}. Investment banking (IB) is worse. By some estimates, document preparation eats up half to three-quarters of a junior banker's week, and pitch books (PBs) account for a big chunk of that \parencite{cfi2025analyst, wso2024hours}. When Goldman Sachs surveyed its first-year analysts in 2021, the average was 98 hours a week, and preparing documents was a major driver of the burnout they reported \parencite{bbc2021goldmanjuniors}. Yet most PBs look nearly identical to one another. Change the company name and update the numbers, and you could reuse last month's deck. This repetitiveness makes them well suited to automation.
+Knowledge workers are people whose jobs involve handling information rather than physical goods: analysts, consultants, lawyers, accountants, and similar professionals. McKinsey found they spend a fifth of their time just searching for information \parencite{mckinsey2012social}. Investment banking (IB) is worse. By some estimates, document preparation eats up half to three-quarters of a junior banker's week, and pitch books (PBs) account for a big chunk of that \parencite{cfi2025analyst, wso2024hours}. When Goldman Sachs surveyed its first-year analysts in 2021, the average was 98 hours a week, and preparing documents was a major driver of the burnout they reported \parencite{bbc2021goldmanjuniors}. Yet most PBs look nearly identical to one another. Change the company name and update the numbers, and you could reuse last month's deck. This repetitiveness makes them good candidates for automation.
 
 IB firms advise companies on mergers, acquisitions, capital raising, and other financial transactions. The work is high-stakes. A single deal might be worth billions of dollars, and the documents that support these deals need to be accurate, professional, and persuasive. PBs are the primary vehicle for communicating analysis to clients and internal stakeholders. They summarise a company's financial position, compare it to peers, and make the case for why a particular transaction makes sense. Getting these documents right matters, but getting them done quickly matters too.
 
@@ -275,7 +275,7 @@ Second, institutional knowledge tends to disappear. Researchers distinguish betw
 
 Third, onboarding takes longer than it should. Each bank has its own templates, preferred data sources, writing conventions, and quality expectations. Junior analysts absorb these through trial and error, which is slow for them and a drain on the senior bankers who review their work. A new analyst might spend weeks learning which template to use for which situation, how to format financial tables correctly, and what level of detail is expected in different sections. This knowledge exists somewhere in the organisation, but finding it and absorbing it takes time.
 
-These three problems reinforce each other. When knowledge is scattered, people waste time searching for it. When standards live in people's heads rather than in documents, output quality varies and review cycles drag on. When training happens informally, experienced staff lose hours to coaching that could have gone toward billable work. A system that tackled even one of these issues would help, but one that addressed all three could meaningfully change how PB production works.
+These three problems reinforce each other. When knowledge is scattered, people waste time searching for it. When standards live in people's heads rather than in documents, output quality varies and review cycles drag on. When training happens informally, experienced staff lose hours to coaching that could have gone toward billable work. A system that tackled even one of these issues would help. One that addressed all three could change how PB production works entirely.
 
 \subsection{Gap Analysis}
 \label{sec:gap-analysis}
@@ -284,17 +284,17 @@ Automated presentation tools have existed for years. Early versions converted te
 
 PPTAgent takes a different approach \parencite{zheng2025pptagent}. It analyses reference presentations, extracts their structural patterns, and applies those patterns to new content. Because it learns from real examples rather than following hardcoded rules, it beat older text-to-slide systems on both content quality and design quality in testing.
 
-The catch is that PPTAgent targets general-purpose presentations, and IB PBs are anything but general. They have financial tables with specific column layouts, transaction comparables formatted in particular ways, and market positioning charts that follow visual conventions the industry recognises. Generic tools miss these conventions entirely, and in IB, getting the template wrong kills credibility. You could have the best analysis in the world, but if the deck looks off, nobody will take it seriously.
+The catch is that PPTAgent targets general-purpose presentations, but IB PBs have specific conventions that generic tools miss. They have financial tables with specific column layouts, transaction comparables formatted in particular ways, and market positioning charts that follow visual conventions the industry recognises. Generic tools miss these conventions entirely, and in IB, getting the template wrong undermines credibility. You could have the best analysis in the world, but if the deck looks off, nobody will take it seriously.
 
 Commercial tools share this flaw. Beautiful.ai, Tome, and Gamma can all generate slides from a prompt, but the output is generic and every slide needs rework to match firm standards. None of them connect to financial data sources either, so analysts still have to gather numbers and enter them by hand. These tools work well for general business presentations, but they were not built for the specific demands of financial services.
 
-The fundamental challenge is that IB PBs require both domain knowledge and visual precision. The content needs to reflect financial expertise. The formatting needs to match exacting corporate standards. Generic AI tools typically handle one or the other, but not both. A system that could combine financial data retrieval, domain-appropriate content generation, and template-aware slide assembly would address a genuine unmet need.
+The challenge is that IB PBs require both domain knowledge and visual precision. The content needs to reflect financial expertise. The formatting needs to match exacting corporate standards. Generic AI tools typically handle one or the other, but not both. A system combining financial data retrieval, domain-appropriate content, and template-aware assembly would fill this gap.
 
-Here is the gap. Current systems either produce generic output that needs heavy cleanup, or they require large training datasets to learn industry-specific patterns. Most banks lack those datasets. What nobody seems to have built yet is a system that can take a single reference template, extract its styling and layout rules programmatically, and generate new slides that follow those rules exactly. That kind of template-aware approach would let firms preserve their visual identity while offloading the tedious formatting work.
+Here is the gap. Current systems either produce generic output that needs heavy cleanup, or they require large training datasets to learn industry-specific patterns. Most banks lack those datasets. On the data side, no existing tool connects slide generation to financial APIs. Analysts still pull numbers from Yahoo Finance or public filings, copy them into Excel, format them, and paste them into PowerPoint. The data retrieval and the document generation remain separate manual steps. What nobody seems to have built yet is a system that can take a single reference template, extract its styling and layout rules programmatically, pull live financial data from APIs, and populate tables with current numbers while matching the template exactly.
 
-Agentic AI architectures look promising for this \parencite{ibm2024agentic}. Instead of one model doing everything in a single pass, the system breaks tasks into steps and uses the right tool for each one. Wang et al. surveyed LLM-based agents and found that progress has been rapid \parencite{wang2023llmagents}. McKinsey estimates generative AI could deliver \$340 billion annually in banking \parencite{mckinsey2024genaibanking}. Document-heavy workflows sit right in the sweet spot.
+Agentic AI architectures look promising for this \parencite{ibm2024agentic}. Instead of one model doing everything in a single pass, the system breaks tasks into steps and uses the right tool for each one. Wang et al. surveyed LLM-based agents and found that progress has been rapid \parencite{wang2023llmagents}. McKinsey estimates generative AI could deliver \$340 billion annually in banking \parencite{mckinsey2024genaibanking}. Document-heavy workflows are a natural fit.
 
-My project addresses this gap. The pipeline extracts layouts, colour palettes, and placeholder positions from a template using python-pptx, uses an LLM to plan content, then assembles slides matching the original style. I am using existing agentic frameworks rather than custom orchestration. RAG against past PBs is a stretch goal.
+My project addresses this gap. The pipeline extracts layouts, colour palettes, and placeholder positions from a template using python-pptx, uses an LLM to plan content, then assembles slides matching the original style. To coordinate these steps, I am using existing agentic frameworks rather than building custom orchestration. RAG against past PBs is a stretch goal.
 
 The approach differs from prior work in two important ways. First, it prioritises template fidelity over content generation. The system starts with the visual constraints and works backward to content, rather than generating content and hoping the formatting works out. Second, it uses an agentic architecture where specialised components handle distinct parts of the task. One component analyses templates, another retrieves data, another plans content, and another assembles slides. This separation makes the system easier to test and modify.
 
@@ -305,7 +305,7 @@ The aim is to design, build, and test a proof-of-concept (POC) demonstrating how
 
 On the business side, I want a workflow where an analyst can provide minimal input and get back a solid first draft. That would cut the time spent on formatting grunt work while keeping humans in control of the actual analysis. The target users are junior analysts, the people who currently spend most of their hours on document preparation.
 
-On the learning side, I want to understand how to connect LLM orchestration with programmatic document generation. That means getting into agentic architectures, learning how to extract patterns from templates, and working out how to combine multiple AI capabilities into something that functions end to end. I am also interested in human-in-the-loop (HITL) design, since in a regulated industry like finance, AI tools need to support professional judgement rather than try to replace it. The banking sector faces significant regulatory scrutiny, and any AI system deployed in this context must be transparent, auditable, and controllable by human operators.
+On the learning side, I want to understand how to connect LLM orchestration with programmatic document generation. That means getting into agentic architectures, learning how to extract patterns from templates, and working out how to combine multiple AI capabilities into something that functions end to end. I am also interested in human-in-the-loop (HITL) design, since in a regulated industry like finance, AI tools need to support professional judgement rather than try to replace it. Banks face heavy regulation, and any AI system deployed there must be transparent, auditable, and controllable by human operators.
 
 Five objectives structure the work:
 
@@ -333,7 +333,7 @@ Success criteria:
     \item Content structure following IB conventions, verified against precedent examples
 \end{itemize}
 
-One principle runs through all of this: HITL design. The system produces drafts for human review, not finished products. The goal is a solid starting point rather than a blank slide. This approach acknowledges that AI systems are not yet capable of the nuanced judgement that financial analysis requires, but they can handle the mechanical work that currently absorbs too much human attention.
+One principle runs through all of this: HITL design. The system produces drafts for human review, not finished products. The goal is a solid starting point rather than a blank slide. This approach acknowledges that AI systems are not yet capable of the nuanced judgement that financial analysis requires, but they can handle the mechanical work that absorbs too much human attention.
 
 % --------------------------------------------
 % SUBSEQUENT SECTIONS
@@ -342,7 +342,7 @@ One principle runs through all of this: HITL design. The system produces drafts 
 \section{Methodology and Project Plan}
 \label{sec:methodology}
 
-This section covers how I will approach development, what the requirements are, which technologies I have chosen and why, the project schedule, and how I am thinking about risks and ethics. Reproducibility is a guiding principle throughout. I want anyone reading this work to be able to understand my choices, replicate my setup, and reproduce my results.
+This section covers how I will approach development, what the requirements are, which technologies I have chosen and why, the project schedule, and how I am thinking about risks and ethics. Reproducibility matters throughout. I want anyone reading this work to be able to understand my choices, replicate my setup, and reproduce my results.
 
 \subsection{Development Methodology}
 \label{sec:dev-methodology}
@@ -374,7 +374,7 @@ I will use a hybrid methodology combining iterative prototyping with structured 
 
 The choice of iterative prototyping reflects the nature of the problem. I am building a system that combines several technologies in ways that have not been done before. Some technical decisions will only make sense after I have tried them. For example, I cannot know in advance whether a particular prompt structure will produce good slide content until I have tested it with real data. The methodology needs to accommodate this kind of learning.
 
-At the same time, this is academic work that others should be able to evaluate and build upon. That means I need to document my decisions, track my progress, and make my process transparent. The structured practices serve this purpose.
+At the same time, this is academic work that others should be able to evaluate and build upon. That means I need to document my decisions, track my progress, and make my process transparent. The structured practices make that possible.
 
 Each two-week iteration will produce a working prototype targeting defined requirements. At each cycle's end, I will conduct a retrospective review and document outcomes. Feedback from IB practitioners, where possible, will shape subsequent cycles. The iteration cycle follows a consistent pattern: plan what to build, build it, test it, document what I learned, and decide what to do next.
 
@@ -391,7 +391,7 @@ Requirements follow the MoSCoW prioritisation scheme. "Must have" requirements d
 
 \subsubsection{Business Requirements}
 
-Business requirements describe the value the project should deliver. These connect technical work to real-world outcomes:
+Business requirements describe what value the project should deliver:
 
 \begin{enumerate}
     \item \textbf{BR1: Productivity Enhancement}: Reduce time spent on initial PB drafting by generating solid first drafts from minimal input.
@@ -484,7 +484,7 @@ I chose technologies based on four factors:
 \begin{itemize}
     \item \textbf{Task fit}: Does the tool solve the specific problem well?
     \item \textbf{Familiarity}: Do I already know how to use it?
-    \item \textbf{Ecosystem maturity}: Is it well-documented with active community support?
+    \item \textbf{Maturity}: Is it well-documented with active community support?
     \item \textbf{Maintainability}: Will it be easy to debug and extend?
 \end{itemize}
 
@@ -569,26 +569,26 @@ Table~\ref{tab:frontend-comparison} compares frontend framework options.
 
 \begin{table}[H]
 \centering
-\begin{tabularx}{\textwidth}{|l|L|L|L|}
+\begin{tabularx}{\textwidth}{|l|L|L|L|L|}
 \hline
-\textbf{Criteria} & \textbf{React + TypeScript} & \textbf{Vue.js} & \textbf{Svelte} \\
+\textbf{Criteria} & \textbf{Next.js} & \textbf{React + TypeScript} & \textbf{Vue.js} & \textbf{Svelte} \\
 \hline
-Benefits & Large ecosystem, strong typing, excellent tooling, familiar from work experience & Gentle learning curve, good documentation & Smaller bundle size, less boilerplate \\
+Benefits & Built-in API routes, server-side rendering, industry standard, strong community & Large ecosystem, strong typing, excellent tooling & Gentle learning curve, good documentation & Smaller bundle size, less boilerplate \\
 \hline
-Risks & Boilerplate overhead, frequent ecosystem changes & Smaller job market, fewer enterprise examples & Immature ecosystem, limited component libraries \\
+Risks & Opinionated structure, Vercel-centric tooling & Boilerplate overhead, frequent ecosystem changes & Smaller job market, fewer enterprise examples & Immature ecosystem, limited component libraries \\
 \hline
-Component libraries & Extensive (MUI, Chakra, Radix) & Good (Vuetify, Quasar) & Limited options \\
+Component libraries & All React libraries (MUI, Chakra, Radix) & Extensive (MUI, Chakra, Radix) & Good (Vuetify, Quasar) & Limited options \\
 \hline
-TypeScript support & Native, excellent & Good & Good \\
+TypeScript support & Native, excellent & Native, excellent & Good & Good \\
 \hline
-Deployment options & Vercel, Netlify, AWS & Similar options & Similar options \\
+Deployment options & Vercel (optimised), Netlify, AWS & Vercel, Netlify, AWS & Similar options & Similar options \\
 \hline
 \end{tabularx}
 \caption{Frontend Framework Comparison}
 \label{tab:frontend-comparison}
 \end{table}
 
-I chose React with TypeScript because I already use it at work, so I can focus on the project rather than learning a new framework. TypeScript catches errors early, and the component library ecosystem means I will not need to build UI elements from scratch.
+I chose Next.js because it has become the industry standard for React applications. It includes built-in API routes, which simplifies the architecture by letting me handle simple backend endpoints without a separate server. The framework has strong community support and extensive documentation. TypeScript integration is native, and I can use the full React component library ecosystem.
 
 Table~\ref{tab:deployment-comparison} compares deployment and hosting options.
 
@@ -616,7 +616,11 @@ The frontend will deploy through Vercel. The Python backend will run on Render w
 \subsection{Reproducibility}
 \label{sec:reproducibility}
 
-Reproducibility matters for credible research engineering. All Python dependencies will be pinned to exact versions in \texttt{requirements.txt}, with a \texttt{Dockerfile} for environment replication. LLM API calls will use \texttt{temperature=0} for evaluation runs to maximise determinism, and any randomised components will use fixed seeds. Runtime configuration will be separated from code using \texttt{config.yaml}, with all settings logged at startup. Each evaluation run will be timestamped and associated with a Git commit hash, with full prompt and response logging for LLM interactions.
+Reproducibility means someone else can take my work, run it in their own environment, and get the same results. This matters for two reasons. First, it lets others verify my findings rather than taking them on trust. Second, it means I can return to earlier experiments and understand exactly what produced a particular output.
+
+LLM-based systems make reproducibility harder than traditional software. The same prompt can produce different outputs on different runs, and model providers update their systems without notice. I cannot guarantee identical results, but I can make it possible to get close.
+
+To support this, I will pin all Python dependencies to exact versions and provide a Dockerfile so others can replicate my environment. For evaluation runs, I will set LLM temperature to zero to reduce randomness. I will separate configuration from code using a config file, and log all settings at startup. Each evaluation run will be tied to a specific Git commit, and I will log the full prompts and responses for LLM calls so I can trace how outputs were generated.
 
 \subsection{Evaluation Methodology}
 \label{sec:evaluation-methodology}
@@ -630,7 +634,7 @@ I will assess the system against four metrics:
     \item \textbf{Content quality}: rubric-based assessment of narrative coherence and IB conventions
 \end{itemize}
 
-To contextualise performance, I will compare outputs against a naive baseline using generic tools (Gamma, Beautiful.ai) and estimated manual creation time. This comparison helps establish whether the system provides meaningful improvement over existing approaches.
+To contextualise performance, I will compare outputs against a naive baseline using generic tools (Gamma, Beautiful.ai) and estimated manual creation time. This comparison shows whether the system actually improves on existing approaches.
 
 Ablation studies will test each component's contribution. I will run the system with different components disabled: content generation without template analysis, template analysis without LLM planning, and data retrieval without web search. These experiments will reveal which parts of the pipeline contribute most to output quality.
 
@@ -769,7 +773,7 @@ For high-impact risks, I have simple contingency rules. If LLM validation failur
 \subsection{Ethics, Data Governance and Compliance}
 \label{sec:ethics}
 
-AI systems in financial services raise particular ethical concerns. The documents they help produce can influence major business decisions. Errors or bias in generated content could mislead clients or expose firms to liability. The design must address these concerns directly.
+AI systems in financial services raise ethical concerns worth addressing directly. The documents they help produce can influence major business decisions. Errors or bias in generated content could mislead clients or expose firms to liability. The design must address these concerns directly.
 
 The system keeps humans in control of analytical judgements. Generated content is marked as AI-assisted, and HITL design ensures professional review before distribution. The system prioritises accuracy over completeness, flagging uncertainty rather than presenting unverified information as fact. When the system cannot retrieve data or has low confidence in generated content, it says so explicitly rather than filling gaps with plausible-sounding fabrications.
 
@@ -787,9 +791,9 @@ This approach serves two purposes. First, it keeps me organised during developme
 \subsection{Reusability}
 \label{sec:reusability}
 
-Academic projects should produce reusable artefacts where possible. Code that only works for one specific case has limited value. I have designed the architecture with reusability in mind.
+Academic projects should produce reusable artefacts where possible. Code that only works for one specific case has limited value.
 
-The architecture separates concerns into independent modules (template analysis, data retrieval, content planning, slide assembly), each with clean interfaces for standalone reuse. Someone interested only in template analysis could use that module without the rest of the system. Someone building a different kind of document generator could reuse the data retrieval layer.
+The architecture separates concerns into independent modules (template analysis, data retrieval, content planning, slide assembly), each usable on its own. Someone interested only in template analysis could use that module without the rest of the system. Someone building a different kind of document generator could reuse the data retrieval layer.
 
 All code will include Google-style docstrings, with a detailed README and architecture documentation. The codebase will be released under MIT License to minimise barriers to reuse. Configuration will be externalised so that adapting the system to different use cases does not require modifying source code.
 
